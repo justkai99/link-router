@@ -1,5 +1,6 @@
 import { defineConfig } from "wxt";
 import path from "path";
+import tailwindcss from "@tailwindcss/vite";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -8,6 +9,7 @@ export default defineConfig({
     permissions: ["tabs", "storage"],
   },
   vite: () => ({
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./"),

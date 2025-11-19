@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-
+import { Button } from '@/components/ui/button';
 </script>
 
 <template>
-  hello options
+  <Button>Click Me</Button>
 </template>
 
 <style scoped>
