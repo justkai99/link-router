@@ -14,10 +14,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
+const rules = ref<any>([]);
+
 // 定义验证规则
 const formSchema = toTypedSchema(
   z.object({
-    rule: z.string(),
+    rule: z.string().min(1, "Rule is required"),
     description: z.string(),
     target: z.string(),
     enabled: z.boolean().optional(),
@@ -41,10 +43,15 @@ const [description, descriptionAttrs] = defineField("description");
 const [target, targetAttrs] = defineField("target");
 const [enabled, enabledAttrs] = defineField("enabled");
 
+onMounted(async () => {
+  const localRules: any = await storage.getItem("local:rules");
+  rules.value = JSON.parse(localRules) || [];
+});
+
 // 提交处理
-const onSubmit = handleSubmit((values) => {
-  console.log("表单提交成功:", values);
-  // 这里可以发送数据到后端
+const onSubmit = handleSubmit((formData) => {
+  rules.value.push(formData);
+  storage.setItem("local:rules", JSON.stringify(rules.value));
 });
 </script>
 
@@ -88,7 +95,7 @@ const onSubmit = handleSubmit((values) => {
         </div>
         <div class="flex items-center space-x-2">
           <RadioGroupItem id="r2" value="incognito" />
-          <Label for="r2">Comfortable</Label>
+          <Label for="r2">Incognito</Label>
         </div>
       </RadioGroup>
     </Field>
@@ -111,4 +118,10 @@ const onSubmit = handleSubmit((values) => {
 
     <Button type="submit">提交</Button>
   </form>
+
+  <div>
+    <p v-for="(rule, index) in rules" :key="index">
+      {{ rule }}
+    </p>
+  </div>
 </template>
