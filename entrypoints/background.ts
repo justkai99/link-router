@@ -1,3 +1,4 @@
+import { storage } from "#imports";
 import { OpenWith, RuleItem } from "@/lib/types";
 
 export default defineBackground(() => {
@@ -7,11 +8,12 @@ export default defineBackground(() => {
   (async () => {
     try {
       const rulesJson: string | null = await storage.getItem("local:rules");
-      rules = JSON.parse(rulesJson ?? "") || [];
+
+      rules = JSON.parse(rulesJson ?? "[]");
 
       // 监听存储变化，更新缓存
       storage.watch("local:rules", (newRule: any) => {
-        rules = JSON.parse(newRule) || [];
+        rules = JSON.parse(newRule ?? "[]");
       });
     } catch (error) {
       console.error("Storage initialization error:", error);
