@@ -21,7 +21,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
-import { DialogType, RuleItem } from "@/lib/types";
+import { DialogType, OpenWith, RuleItem } from "@/lib/types";
 import { uuid } from "@/lib/utils";
 
 interface Props {
@@ -51,7 +51,7 @@ const formSchema = toTypedSchema(
       .string()
       .min(1, "Description is required")
       .max(128, "Description is too long"),
-    openWith: z.enum(["normal", "incognito"]),
+    openWith: z.enum(OpenWith),
     enabled: z.boolean().optional(),
   })
 );
@@ -62,7 +62,7 @@ const { handleSubmit, errors, defineField } = useForm({
   initialValues: {
     regexp: ruleItem?.regexp || "",
     description: ruleItem?.description || "",
-    openWith: ruleItem?.openWith || "normal",
+    openWith: ruleItem?.openWith || OpenWith.Incognito,
     enabled: ruleItem?.enabled !== undefined ? ruleItem.enabled : true,
   },
 });
