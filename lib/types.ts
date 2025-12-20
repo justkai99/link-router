@@ -1,6 +1,6 @@
 export interface RuleItem {
   id?: string;
-  rule: string;
+  regexp: string;
   description: string;
   openWith: OpenWith;
   enabled: boolean;

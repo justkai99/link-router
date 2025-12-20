@@ -36,8 +36,21 @@ const open = defineModel<boolean>("open");
 // 定义验证规则
 const formSchema = toTypedSchema(
   z.object({
-    rule: z.string().min(1, "Rule is required"),
-    description: z.string().min(1, "Description is required"),
+    regexp: z
+      .string()
+      .min(1, "RegExp is required")
+      .refine((value) => {
+        try {
+          new RegExp(value);
+          return true;
+        } catch {
+          return false;
+        }
+      }, "Invalid RegExp pattern"),
+    description: z
+      .string()
+      .min(1, "Description is required")
+      .max(128, "Description is too long"),
     openWith: z.enum(["normal", "incognito"]),
     enabled: z.boolean().optional(),
   })
@@ -47,7 +60,7 @@ const formSchema = toTypedSchema(
 const { handleSubmit, errors, defineField } = useForm({
   validationSchema: formSchema,
   initialValues: {
-    rule: ruleItem?.rule || "",
+    regexp: ruleItem?.regexp || "",
     description: ruleItem?.description || "",
     openWith: ruleItem?.openWith || "normal",
     enabled: ruleItem?.enabled !== undefined ? ruleItem.enabled : true,
@@ -55,7 +68,7 @@ const { handleSubmit, errors, defineField } = useForm({
 });
 
 // 定义字段
-const [rule, ruleAttrs] = defineField("rule");
+const [regexp, regexpAttrs] = defineField("regexp");
 const [description, descriptionAttrs] = defineField("description");
 const [openWith, openWithAttrs] = defineField("openWith");
 const [enabled, enabledAttrs] = defineField("enabled");
@@ -72,7 +85,7 @@ const submit = handleSubmit((formData) => {
 const create = async (formData: RuleItem) => {
   const newRule: RuleItem = {
     id: uuid(),
-    rule: formData.rule,
+    regexp: formData.regexp,
     description: formData.description,
     openWith: formData.openWith,
     enabled: formData.enabled,
@@ -90,7 +103,7 @@ const edit = async (formData: RuleItem) => {
   if (index !== -1) {
     rules[index] = {
       ...rules[index],
-      rule: formData.rule,
+      regexp: formData.regexp,
       description: formData.description,
       openWith: formData.openWith,
       enabled: formData.enabled,
@@ -115,17 +128,17 @@ const close = () => {
         </DialogHeader>
 
         <Field>
-          <FieldLabel for="rule">Rule</FieldLabel>
+          <FieldLabel for="regexp">RegExp</FieldLabel>
           <Input
-            id="rule"
-            v-model="rule"
-            v-bind="ruleAttrs"
+            id="regexp"
+            v-model="regexp"
+            v-bind="regexpAttrs"
             placeholder=""
-            :aria-invalid="!!errors.rule"
+            :aria-invalid="!!errors.regexp"
           />
-          <FieldDescription>Please input rule</FieldDescription>
-          <FieldError v-if="errors.rule">
-            {{ errors.rule }}
+          <FieldDescription>Please input RegExp</FieldDescription>
+          <FieldError v-if="errors.regexp">
+            {{ errors.regexp }}
           </FieldError>
         </Field>
 

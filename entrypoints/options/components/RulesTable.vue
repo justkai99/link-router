@@ -44,13 +44,13 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
     <TableHeader>
       <TableRow>
         <TableHead class="w-[50px]"> # </TableHead>
-        <TableHead> Rule </TableHead>
+        <TableHead> RegExp </TableHead>
         <TableHead> Description </TableHead>
         <TableHead> Open With </TableHead>
         <TableHead> Enabled </TableHead>
         <TableHead> Created At </TableHead>
         <TableHead> Updated At </TableHead>
-        <TableHead> Operations </TableHead>
+        <TableHead class="w-[100px]"> Operations </TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -58,7 +58,7 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
         <TableCell class="font-medium">
           {{ index + 1 }}
         </TableCell>
-        <TableCell>{{ ruleItem.rule }}</TableCell>
+        <TableCell>{{ ruleItem.regexp }}</TableCell>
         <TableCell>{{ ruleItem.description }}</TableCell>
         <TableCell>{{ ruleItem.openWith }}</TableCell>
         <TableCell>{{ ruleItem.enabled }}</TableCell>
