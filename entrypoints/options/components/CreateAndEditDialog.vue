@@ -133,10 +133,9 @@ const close = () => {
             id="regexp"
             v-model="regexp"
             v-bind="regexpAttrs"
-            placeholder=""
+            placeholder="Please input"
             :aria-invalid="!!errors.regexp"
           />
-          <FieldDescription>Please input RegExp</FieldDescription>
           <FieldError v-if="errors.regexp">
             {{ errors.regexp }}
           </FieldError>
@@ -148,10 +147,9 @@ const close = () => {
             id="description"
             v-model="description"
             v-bind="descriptionAttrs"
-            placeholder=""
+            placeholder="Please input"
             :aria-invalid="!!errors.description"
           />
-          <FieldDescription>Please input description</FieldDescription>
           <FieldError v-if="errors.description">
             {{ errors.description }}
           </FieldError>
@@ -160,14 +158,14 @@ const close = () => {
         <Field>
           <FieldLabel for="openWith">Open With</FieldLabel>
           <RadioGroup id="openWith" v-model="openWith" v-bind="openWithAttrs">
-            <div class="flex items-center space-x-2">
+            <span class="flex items-center space-x-2">
               <RadioGroupItem id="r1" value="normal" />
               <Label for="r1">Normal</Label>
-            </div>
-            <div class="flex items-center space-x-2">
+            </span>
+            <span class="flex items-center space-x-2">
               <RadioGroupItem id="r2" value="incognito" />
               <Label for="r2">Incognito</Label>
-            </div>
+            </span>
           </RadioGroup>
         </Field>
 
@@ -181,7 +179,6 @@ const close = () => {
               :aria-invalid="!!errors.enabled"
             />
           </div>
-          <FieldDescription>Enable or disable the rule</FieldDescription>
           <FieldError v-if="errors.enabled">
             {{ errors.enabled }}
           </FieldError>
