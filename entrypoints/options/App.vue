@@ -1,127 +1,37 @@
 <script setup lang="ts">
-import { toTypedSchema } from "@vee-validate/zod";
-import { useForm } from "vee-validate";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Plus } from "lucide-vue-next";
+import { DialogType } from "@/lib/types";
+import CreateAndEditDialog from "./components/CreateAndEditDialog.vue";
+import Button from "@/components/ui/button/Button.vue";
+import RulesTable from "./components/RulesTable.vue";
 
 const rules = ref<any>([]);
 
-// 定义验证规则
-const formSchema = toTypedSchema(
-  z.object({
-    rule: z.string().min(1, "Rule is required"),
-    description: z.string(),
-    target: z.string(),
-    enabled: z.boolean().optional(),
-  })
-);
-
-// 创建表单实例
-const { handleSubmit, errors, defineField } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    rule: "",
-    description: "",
-    target: "normal",
-    enabled: true,
-  },
-});
-
-// 定义字段
-const [rule, ruleAttrs] = defineField("rule");
-const [description, descriptionAttrs] = defineField("description");
-const [target, targetAttrs] = defineField("target");
-const [enabled, enabledAttrs] = defineField("enabled");
+const open = ref(false);
 
 onMounted(async () => {
-  const localRules: any = await storage.getItem("local:rules");
-  rules.value = JSON.parse(localRules) || [];
-});
-
-// 提交处理
-const onSubmit = handleSubmit((formData) => {
-  rules.value.push(formData);
-  storage.setItem("local:rules", JSON.stringify(rules.value));
+  try {
+    const rulesJson: any = await storage.getItem("local:rules");
+    rules.value = JSON.parse(rulesJson) || [];
+  } catch (error) {
+    console.error("Failed to load rules from storage:", error);
+    rules.value = [];
+  }
 });
 </script>
 
 <template>
-  <form @submit="onSubmit" class="w-full max-w-md space-y-6">
-    <Field>
-      <FieldLabel for="rule">Rule</FieldLabel>
-      <Input
-        id="rule"
-        v-model="rule"
-        v-bind="ruleAttrs"
-        placeholder=""
-        :aria-invalid="!!errors.rule"
-      />
-      <FieldDescription>Please input rule</FieldDescription>
-      <FieldError v-if="errors.rule">
-        {{ errors.rule }}
-      </FieldError>
-    </Field>
-    <Field>
-      <FieldLabel for="description">Description</FieldLabel>
-      <Input
-        id="description"
-        v-model="description"
-        v-bind="descriptionAttrs"
-        placeholder=""
-        :aria-invalid="!!errors.description"
-      />
-      <FieldDescription>Please input description</FieldDescription>
-      <FieldError v-if="errors.description">
-        {{ errors.description }}
-      </FieldError>
-    </Field>
-
-    <Field>
-      <FieldLabel for="target">Target</FieldLabel>
-      <RadioGroup id="target" v-model="target" v-bind="targetAttrs">
-        <div class="flex items-center space-x-2">
-          <RadioGroupItem id="r1" value="normal" />
-          <Label for="r1">Normal</Label>
-        </div>
-        <div class="flex items-center space-x-2">
-          <RadioGroupItem id="r2" value="incognito" />
-          <Label for="r2">Incognito</Label>
-        </div>
-      </RadioGroup>
-    </Field>
-
-    <Field>
-      <FieldLabel for="enabled">Enabled</FieldLabel>
-      <div>
-        <Checkbox
-          id="enabled"
-          v-model="enabled"
-          v-bind="enabledAttrs"
-          :aria-invalid="!!errors.enabled"
-        />
-      </div>
-      <FieldDescription>Enable or disable the rule</FieldDescription>
-      <FieldError v-if="errors.enabled">
-        {{ errors.enabled }}
-      </FieldError>
-    </Field>
-
-    <Button type="submit">提交</Button>
-  </form>
-
+  <Button @click="open = true">
+    <Plus />
+    Create
+  </Button>
   <div>
-    <p v-for="(rule, index) in rules" :key="index">
-      {{ rule }}
-    </p>
+    <RulesTable :rules />
   </div>
+  <CreateAndEditDialog
+    v-if="open"
+    :type="DialogType.Create"
+    :rules
+    v-model:open="open"
+  />
 </template>
