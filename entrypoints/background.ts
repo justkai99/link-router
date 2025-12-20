@@ -24,8 +24,9 @@ export default defineBackground(() => {
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (!changeInfo.url) return;
 
-    const matchedRule = rules.find((item) =>
-      new RegExp(item.regexp).test(changeInfo.url as string)
+    const matchedRule = rules.find(
+      (item) =>
+        item.enabled && new RegExp(item.regexp).test(changeInfo.url as string)
     );
     if (matchedRule) {
       // 已在目标窗口打开则不处理
