@@ -7,6 +7,7 @@ export default defineConfig({
   modules: ["@wxt-dev/module-vue"],
   manifest: {
     permissions: ["tabs", "storage"],
+    action: {}, // Enable the extension icon in the toolbar
   },
   vite: () => ({
     plugins: [tailwindcss()],
