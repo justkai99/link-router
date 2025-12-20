@@ -2,13 +2,13 @@ export interface RuleItem {
   id?: string;
   regexp: string;
   description: string;
-  openWith: OpenWith;
+  openIn: OpenIn;
   enabled: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export enum OpenWith {
+export enum OpenIn {
   Normal = "normal",
   Incognito = "incognito",
 }

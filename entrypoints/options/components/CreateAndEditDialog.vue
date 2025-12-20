@@ -21,7 +21,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
-import { DialogType, OpenWith, RuleItem } from "@/lib/types";
+import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import { uuid } from "@/lib/utils";
 
 interface Props {
@@ -51,7 +51,7 @@ const formSchema = toTypedSchema(
       .string()
       .min(1, "Description is required")
       .max(128, "Description is too long"),
-    openWith: z.enum(OpenWith),
+    openIn: z.enum(OpenIn),
     enabled: z.boolean().optional(),
   })
 );
@@ -62,7 +62,7 @@ const { handleSubmit, errors, defineField } = useForm({
   initialValues: {
     regexp: ruleItem?.regexp || "",
     description: ruleItem?.description || "",
-    openWith: ruleItem?.openWith || OpenWith.Incognito,
+    openIn: ruleItem?.openIn || OpenIn.Incognito,
     enabled: ruleItem?.enabled !== undefined ? ruleItem.enabled : true,
   },
 });
@@ -70,7 +70,7 @@ const { handleSubmit, errors, defineField } = useForm({
 // 定义字段
 const [regexp, regexpAttrs] = defineField("regexp");
 const [description, descriptionAttrs] = defineField("description");
-const [openWith, openWithAttrs] = defineField("openWith");
+const [openIn, openInAttrs] = defineField("openIn");
 const [enabled, enabledAttrs] = defineField("enabled");
 
 // 提交处理
@@ -87,7 +87,7 @@ const create = async (formData: RuleItem) => {
     id: uuid(),
     regexp: formData.regexp,
     description: formData.description,
-    openWith: formData.openWith,
+    openIn: formData.openIn,
     enabled: formData.enabled,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -105,7 +105,7 @@ const edit = async (formData: RuleItem) => {
       ...rules[index],
       regexp: formData.regexp,
       description: formData.description,
-      openWith: formData.openWith,
+      openIn: formData.openIn,
       enabled: formData.enabled,
       updatedAt: new Date().toISOString(),
     };
@@ -156,8 +156,8 @@ const close = () => {
         </Field>
 
         <Field>
-          <FieldLabel for="openWith">Open With</FieldLabel>
-          <RadioGroup id="openWith" v-model="openWith" v-bind="openWithAttrs">
+          <FieldLabel for="openIn">Open In</FieldLabel>
+          <RadioGroup id="openIn" v-model="openIn" v-bind="openInAttrs">
             <span class="flex items-center space-x-2">
               <RadioGroupItem id="r1" value="normal" />
               <Label for="r1">Normal</Label>

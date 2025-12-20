@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Chromium, HatGlasses } from "lucide-vue-next";
-import { DialogType, OpenWith, RuleItem } from "@/lib/types";
+import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./CreateAndEditDialog.vue";
 
 const { rules } = defineProps<{ rules: RuleItem[] }>();
@@ -45,7 +45,7 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
         <TableHead class="w-[50px]">#</TableHead>
         <TableHead>RegExp</TableHead>
         <TableHead>Description</TableHead>
-        <TableHead class="w-[120px]">Open With</TableHead>
+        <TableHead class="w-[120px]">Open In</TableHead>
         <TableHead class="w-[120px]">Enabled</TableHead>
         <TableHead class="w-[160px]">Created At</TableHead>
         <TableHead class="w-[160px]">Updated At</TableHead>
@@ -81,9 +81,9 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
         <TableCell>
           <span
             class="inline-block px-2 py-0.5 rounded-md text-sm font-medium bg-slate-100 text-slate-800"
-            :title="ruleItem.openWith"
+            :title="ruleItem.openIn"
           >
-            <template v-if="ruleItem.openWith === OpenWith.Incognito">
+            <template v-if="ruleItem.openIn === OpenIn.Incognito">
               <HatGlasses class="inline" :size="20" />
               Incognito
             </template>

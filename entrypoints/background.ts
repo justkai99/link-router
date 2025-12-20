@@ -1,5 +1,5 @@
 import { storage } from "#imports";
-import { OpenWith, RuleItem } from "@/lib/types";
+import { OpenIn, RuleItem } from "@/lib/types";
 
 export default defineBackground(() => {
   let rules: RuleItem[] = [];
@@ -31,13 +31,13 @@ export default defineBackground(() => {
     if (matchedRule) {
       // 已在目标窗口打开则不处理
       if (
-        (matchedRule.openWith === OpenWith.Incognito && tab.incognito) ||
-        (matchedRule.openWith === OpenWith.Normal && !tab.incognito)
+        (matchedRule.openIn === OpenIn.Incognito && tab.incognito) ||
+        (matchedRule.openIn === OpenIn.Normal && !tab.incognito)
       ) {
         return;
       }
 
-      await openInNewTab(changeInfo.url, matchedRule.openWith);
+      await openInNewTab(changeInfo.url, matchedRule.openIn);
 
       browser.tabs.remove(tabId).catch(console.error);
     }
@@ -47,18 +47,18 @@ export default defineBackground(() => {
   browser.action.onClicked.addListener(async (tab) => {
     await openInNewTab(
       tab.url!,
-      tab.incognito ? OpenWith.Normal : OpenWith.Incognito
+      tab.incognito ? OpenIn.Normal : OpenIn.Incognito
     );
     browser.tabs.remove(tab.id!).catch(console.error);
   });
 
-  async function openInNewTab(url: string, openWith: OpenWith) {
+  async function openInNewTab(url: string, openIn: OpenIn) {
     const windows = await browser.windows.getAll({
       populate: true,
       windowTypes: ["normal"],
     });
 
-    if (openWith === OpenWith.Incognito) {
+    if (openIn === OpenIn.Incognito) {
       const incognitoWindow = windows.find((win) => win.incognito);
       if (incognitoWindow) {
         // 如果无痕窗口已存在，在该窗口中创建新标签页
