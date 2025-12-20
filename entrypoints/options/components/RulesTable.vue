@@ -40,7 +40,6 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
 
 <template>
   <Table>
-    <TableCaption>A list of your link router rules.</TableCaption>
     <TableHeader>
       <TableRow>
         <TableHead class="w-[50px]">#</TableHead>

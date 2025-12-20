@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Button @click="open = true">
+  <Button @click="open = true" class="mb-1">
     <Plus />
     Create
   </Button>
