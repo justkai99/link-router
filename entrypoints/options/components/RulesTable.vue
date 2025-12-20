@@ -2,7 +2,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -14,7 +13,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DialogType, RuleItem } from "@/lib/types";
+import { Chromium, HatGlasses } from "lucide-vue-next";
+import { DialogType, OpenWith, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./CreateAndEditDialog.vue";
 
 const { rules } = defineProps<{ rules: RuleItem[] }>();
@@ -83,7 +83,14 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
             class="inline-block px-2 py-0.5 rounded-md text-sm font-medium bg-slate-100 text-slate-800"
             :title="ruleItem.openWith"
           >
-            {{ ruleItem.openWith || "-" }}
+            <template v-if="ruleItem.openWith === OpenWith.Incognito">
+              <HatGlasses class="inline" :size="20" />
+              Incognito
+            </template>
+            <template v-else>
+              <Chromium class="inline" :size="20" />
+              Normal
+            </template>
           </span>
         </TableCell>
 
@@ -92,8 +99,8 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
           <span
             :class="
               ruleItem.enabled
-                ? 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm bg-green-100 text-green-800'
-                : 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm bg-red-100 text-red-800'
+                ? 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sm bg-green-100 text-green-800'
+                : 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sm bg-red-100 text-red-800'
             "
             :aria-pressed="ruleItem.enabled ? 'true' : 'false'"
             :title="ruleItem.enabled ? 'Enabled' : 'Disabled'"
