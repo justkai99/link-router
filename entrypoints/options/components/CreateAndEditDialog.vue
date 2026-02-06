@@ -166,6 +166,10 @@ const close = () => {
               <RadioGroupItem id="r2" value="incognito" />
               <Label for="r2">Incognito</Label>
             </span>
+            <span class="flex items-center space-x-2">
+              <RadioGroupItem id="r3" value="ignore" />
+              <Label for="r3">Ignore (Do nothing)</Label>
+            </span>
           </RadioGroup>
         </Field>
 

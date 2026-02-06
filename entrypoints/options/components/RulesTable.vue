@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Chromium, HatGlasses } from "lucide-vue-next";
+import { Chromium, HatGlasses, CircleSlash } from "lucide-vue-next";
 import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./CreateAndEditDialog.vue";
 
@@ -26,6 +26,13 @@ const editRuleItem = ref<RuleItem | null>(null);
 const edit = (ruleItem: RuleItem) => {
   open.value = true;
   editRuleItem.value = ruleItem;
+};
+
+const moveRule = async (fromIndex: number, toIndex: number) => {
+  if (toIndex < 0 || toIndex >= rules.length) return;
+  const [moved] = rules.splice(fromIndex, 1);
+  rules.splice(toIndex, 0, moved);
+  await storage.setItem("local:rules", JSON.stringify(rules));
 };
 
 const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
@@ -87,6 +94,10 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
               <HatGlasses class="inline" :size="20" />
               Incognito
             </template>
+            <template v-else-if="ruleItem.openIn === OpenIn.Ignore">
+              <CircleSlash class="inline" :size="20" />
+              Ignore
+            </template>
             <template v-else>
               <Chromium class="inline" :size="20" />
               Normal
@@ -131,6 +142,27 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
 
         <!-- Operations: Edit + Delete with confirmation -->
         <TableCell class="space-x-2">
+          <Button
+            variant="link"
+            size="sm"
+            :disabled="index === 0"
+            @click="moveRule(index, index - 1)"
+            aria-label="Move rule up"
+            title="Move up"
+          >
+            Up
+          </Button>
+          <Button
+            variant="link"
+            size="sm"
+            :disabled="index === rules.length - 1"
+            @click="moveRule(index, index + 1)"
+            aria-label="Move rule down"
+            title="Move down"
+          >
+            Down
+          </Button>
+
           <Button
             variant="link"
             size="sm"

@@ -11,6 +11,7 @@ export interface RuleItem {
 export enum OpenIn {
   Normal = "normal",
   Incognito = "incognito",
+  Ignore = "ignore",
 }
 
 export enum DialogType {

@@ -6,6 +6,10 @@ Link Router is a browser extension that automatically determines whether a link 
 
 - Smart Routing (Regex Support) Define rules using Regular Expressions (Regex) to automatically route specific types of links to their designated environment (e.g., open work sites in Normal mode, and testing or social sites in Incognito).
 
+- Ignore Rules Add "Ignore" rules to explicitly stop routing for matched URLs (no tab move, no window switch).
+
+- Rule Priority by Order Rules are evaluated top-to-bottom; the first match wins. Use the Up/Down controls to reorder rules.
+
 - Instant Mode Toggle Instantly reopen the current tab in the opposite mode (Normal ⇋ Incognito) by simply clicking the extension icon or using a keyboard shortcut.
 
 ## ⚙️ Key Settings & Usage
@@ -13,5 +17,8 @@ Link Router is a browser extension that automatically determines whether a link 
 1. ⚠️ Critical: Enable Incognito Access After installation, you must go to your browser's extension management page (chrome://extensions), find Link Router, and toggle on "Allow in Incognito". Without this, the extension cannot manage Incognito windows.
 
 2. Configuration Right-click the extension icon > Select Options > Add your Regex patterns and assign the target mode.
+
+   - Open In: Normal / Incognito / Ignore (do nothing)
+   - Order matters: move rules up/down to change priority (first match wins).
 
 3. Recommended Shortcuts For maximum efficiency, we recommend setting the toggle shortcut to Alt + 2 (Windows) or Option + 2 (macOS).

@@ -24,11 +24,21 @@ export default defineBackground(() => {
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (!changeInfo.url) return;
 
-    const matchedRule = rules.find(
-      (item) =>
-        item.enabled && new RegExp(item.regexp).test(changeInfo.url as string)
-    );
+    const matchedRule = rules.find((item) => {
+      if (!item.enabled) return false;
+      try {
+        return new RegExp(item.regexp).test(changeInfo.url as string);
+      } catch (error) {
+        console.warn("Invalid RegExp skipped:", item.regexp, error);
+        return false;
+      }
+    });
     if (matchedRule) {
+      // Ignore rule: stop further matching, do not move tab
+      if (matchedRule.openIn === OpenIn.Ignore) {
+        return;
+      }
+
       // 已在目标窗口打开则不处理
       if (
         (matchedRule.openIn === OpenIn.Incognito && tab.incognito) ||
