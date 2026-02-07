@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { Plus, Search, Filter } from "lucide-vue-next";
+import { Plus, Search, Filter, Download, Upload } from "lucide-vue-next";
 import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./components/CreateAndEditDialog.vue";
 import Button from "@/components/ui/button/Button.vue";
 import RulesTable from "./components/RulesTable.vue";
 import { Input } from "@/components/ui/input";
+import { uuid } from "@/lib/utils";
 
 const rules = ref<RuleItem[]>([]);
+const importInputRef = ref<HTMLInputElement | null>(null);
 
 const open = ref(false);
 const searchQuery = ref("");
@@ -43,6 +45,103 @@ const clearFilters = () => {
   enabledFilter.value = "all";
 };
 
+const exportRules = () => {
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    rules: rules.value,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `link-router-rules-${new Date().toISOString().slice(0, 10)}.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+};
+
+const openImportFilePicker = () => {
+  importInputRef.value?.click();
+};
+
+const normalizeImportedRule = (item: unknown): RuleItem | null => {
+  if (!item || typeof item !== "object") return null;
+  const rule = item as Record<string, unknown>;
+  if (typeof rule.regexp !== "string" || rule.regexp.trim() === "") return null;
+  if (
+    typeof rule.description !== "string" ||
+    rule.description.trim() === ""
+  ) {
+    return null;
+  }
+  if (
+    rule.openIn !== OpenIn.Normal &&
+    rule.openIn !== OpenIn.Incognito &&
+    rule.openIn !== OpenIn.Ignore
+  ) {
+    return null;
+  }
+  return {
+    id: uuid(),
+    regexp: rule.regexp,
+    description: rule.description,
+    openIn: rule.openIn,
+    enabled: typeof rule.enabled === "boolean" ? rule.enabled : true,
+    createdAt:
+      typeof rule.createdAt === "string"
+        ? rule.createdAt
+        : new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+};
+
+const handleImportFile = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    const content = await file.text();
+    const parsed = JSON.parse(content);
+    const rawRules = Array.isArray(parsed)
+      ? parsed
+      : Array.isArray(parsed?.rules)
+        ? parsed.rules
+        : null;
+    if (!rawRules) {
+      alert("Invalid JSON format. Expect RuleItem[] or { rules: RuleItem[] }.");
+      return;
+    }
+
+    const normalizedRules = (rawRules as unknown[])
+      .map((item) => normalizeImportedRule(item))
+      .filter((item): item is RuleItem => item !== null);
+
+    if (normalizedRules.length === 0) {
+      alert("No valid rules found in file.");
+      return;
+    }
+
+    if (
+      rules.value.length > 0 &&
+      !window.confirm(
+        `Import will replace current ${rules.value.length} rules. Continue?`,
+      )
+    ) {
+      return;
+    }
+
+    rules.value = normalizedRules;
+    await storage.setItem("local:rules", JSON.stringify(normalizedRules));
+  } catch (error) {
+    console.error("Failed to import rules:", error);
+    alert("Failed to import rules. Please check JSON format.");
+  } finally {
+    input.value = "";
+  }
+};
+
 onMounted(async () => {
   try {
     const rulesJson: any = await storage.getItem("local:rules");
@@ -73,6 +172,21 @@ onMounted(async () => {
           aria-label="Search rules"
         />
       </div>
+      <input
+        ref="importInputRef"
+        type="file"
+        accept="application/json,.json"
+        class="hidden"
+        @change="handleImportFile"
+      />
+      <Button variant="outline" @click="openImportFilePicker">
+        <Upload />
+        Import JSON
+      </Button>
+      <Button variant="outline" @click="exportRules">
+        <Download />
+        Export JSON
+      </Button>
       <Button @click="open = true">
         <Plus />
         Create
