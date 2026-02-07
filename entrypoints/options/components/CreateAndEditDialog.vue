@@ -195,6 +195,9 @@ watch(open, async (value) => {
               <Label for="r3">Ignore (Do nothing)</Label>
             </span>
           </RadioGroup>
+          <FieldDescription v-if="openIn === OpenIn.Ignore">
+            Ignore has global priority and will prevent routing when matched.
+          </FieldDescription>
         </Field>
 
         <Field>

@@ -23,22 +23,28 @@ export default defineBackground(() => {
   // 使用缓存的规则值（同步访问）
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (!changeInfo.url) return;
+    const targetUrl = changeInfo.url as string;
 
-    const matchedRule = rules.find((item) => {
+    const isMatch = (item: RuleItem) => {
       if (!item.enabled) return false;
       try {
-        return new RegExp(item.regexp).test(changeInfo.url as string);
+        return new RegExp(item.regexp).test(targetUrl);
       } catch (error) {
         console.warn("Invalid RegExp skipped:", item.regexp, error);
         return false;
       }
-    });
-    if (matchedRule) {
-      // Ignore rule: stop further matching, do not move tab
-      if (matchedRule.openIn === OpenIn.Ignore) {
-        return;
-      }
+    };
 
+    // Ignore rules always have global priority regardless of list order.
+    const hasIgnoreMatch = rules.some(
+      (item) => item.openIn === OpenIn.Ignore && isMatch(item),
+    );
+    if (hasIgnoreMatch) return;
+
+    const matchedRule = rules.find(
+      (item) => item.openIn !== OpenIn.Ignore && isMatch(item),
+    );
+    if (matchedRule) {
       // 已在目标窗口打开则不处理
       if (
         (matchedRule.openIn === OpenIn.Incognito && tab.incognito) ||
@@ -47,8 +53,7 @@ export default defineBackground(() => {
         return;
       }
 
-      await openInNewTab(changeInfo.url, matchedRule.openIn);
-
+      await openInNewTab(targetUrl, matchedRule.openIn);
       browser.tabs.remove(tabId).catch(console.error);
     }
   });

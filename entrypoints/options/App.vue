@@ -14,6 +14,9 @@ const openInFilter = ref<OpenIn | "all">("all");
 const enabledFilter = ref<"all" | "enabled" | "disabled">("all");
 
 const totalCount = computed(() => rules.value.length);
+const ignoreCount = computed(
+  () => rules.value.filter((rule) => rule.openIn === OpenIn.Ignore).length,
+);
 const disabledCount = computed(
   () => rules.value.filter((rule) => !rule.enabled).length
 );
@@ -53,6 +56,12 @@ onMounted(async () => {
 
 <template>
   <div class="options-shell">
+    <div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+      Ignore rules always override all other rules, regardless of order.
+      <span class="ml-2 font-medium">
+        {{ ignoreCount }} ignore {{ ignoreCount === 1 ? "rule" : "rules" }}
+      </span>
+    </div>
     <div class="mb-4 flex flex-col gap-3 options-panel p-3">
     <div class="flex flex-wrap items-center gap-2">
       <div class="relative flex-1 min-w-[220px]">
@@ -136,7 +145,7 @@ onMounted(async () => {
           Disabled
         </Button>
       </div>
-      <div class="rounded-md border border-cyan-200 bg-cyan-50 px-2 py-1 text-sm text-cyan-800 md:ml-auto">
+      <div class="options-muted-chip rounded-md px-2 py-1 text-sm md:ml-auto">
         {{ totalCount }} rules · {{ disabledCount }} disabled
       </div>
     </div>

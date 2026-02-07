@@ -64,8 +64,44 @@ const saveRules = async () => {
   await storage.setItem("local:rules", JSON.stringify(sourceRules));
 };
 
+const enabledIgnoreRules = computed(() =>
+  sourceRules.filter((rule) => rule.enabled && rule.openIn === OpenIn.Ignore),
+);
+
 const getRuleIndex = (ruleItem: RuleItem) =>
   sourceRules.findIndex((rule) => rule.id === ruleItem.id);
+
+const isBroadIgnorePattern = (pattern: string) => {
+  const normalized = pattern.trim();
+  return (
+    normalized === ".*" ||
+    normalized === "^.*$" ||
+    normalized === ".+" ||
+    normalized === "^.+$" ||
+    normalized === "^https?://.*$"
+  );
+};
+
+const getShadowingIgnoreRule = (ruleItem: RuleItem) => {
+  if (!ruleItem.enabled || ruleItem.openIn === OpenIn.Ignore) return null;
+  return (
+    enabledIgnoreRules.value.find((ignoreRule) => {
+      if (ignoreRule.id === ruleItem.id) return false;
+      return (
+        ignoreRule.regexp === ruleItem.regexp ||
+        isBroadIgnorePattern(ignoreRule.regexp)
+      );
+    }) || null
+  );
+};
+
+const getShadowingWarning = (ruleItem: RuleItem) => {
+  const ignoreRule = getShadowingIgnoreRule(ruleItem);
+  if (!ignoreRule) return null;
+  return `May never take effect because of Ignore rule: ${
+    ignoreRule.description || ignoreRule.regexp
+  }`;
+};
 
 const moveRule = async (fromIndex: number, toIndex: number) => {
   if (fromIndex < 0) return;
@@ -152,6 +188,13 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
           <div class="truncate" :title="ruleItem.regexp">
             {{ ruleItem.regexp }}
           </div>
+          <div
+            v-if="getShadowingWarning(ruleItem)"
+            class="mt-1 text-xs text-amber-700"
+            :title="getShadowingWarning(ruleItem) || undefined"
+          >
+            {{ getShadowingWarning(ruleItem) }}
+          </div>
         </TableCell>
 
         <!-- Description: truncate with tooltip -->
@@ -181,6 +224,11 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
             <template v-else-if="ruleItem.openIn === OpenIn.Ignore">
               <CircleSlash class="inline" :size="18" />
               Ignore
+              <span
+                class="rounded bg-rose-200 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide"
+              >
+                Highest Priority
+              </span>
             </template>
             <template v-else>
               <Chromium class="inline" :size="18" />
@@ -234,7 +282,12 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
               moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) - 1)
             "
             aria-label="Move rule up"
-            title="Move up"
+            :title="
+              ruleItem.openIn === OpenIn.Ignore
+                ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
+                : 'Move up'
+            "
+            :class="ruleItem.openIn === OpenIn.Ignore ? 'text-slate-500' : ''"
           >
             <ArrowUp class="size-4" />
             Up
@@ -247,7 +300,12 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
               moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) + 1)
             "
             aria-label="Move rule down"
-            title="Move down"
+            :title="
+              ruleItem.openIn === OpenIn.Ignore
+                ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
+                : 'Move down'
+            "
+            :class="ruleItem.openIn === OpenIn.Ignore ? 'text-slate-500' : ''"
           >
             <ArrowDown class="size-4" />
             Down
@@ -291,6 +349,11 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   size="sm"
                   class="justify-start"
                   :disabled="getRuleIndex(ruleItem) === 0"
+                  :title="
+                    ruleItem.openIn === OpenIn.Ignore
+                      ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
+                      : 'Move to top'
+                  "
                   @click.stop.prevent="
                     moveRule(getRuleIndex(ruleItem), 0);
                     close();
@@ -305,6 +368,11 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   class="justify-start"
                   :disabled="
                     getRuleIndex(ruleItem) === sourceRules.length - 1
+                  "
+                  :title="
+                    ruleItem.openIn === OpenIn.Ignore
+                      ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
+                      : 'Move to bottom'
                   "
                   @click.stop.prevent="
                     moveRule(getRuleIndex(ruleItem), sourceRules.length - 1);
