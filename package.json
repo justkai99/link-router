@@ -2,7 +2,7 @@
   "name": "Link Router",
   "description": "Automatically route links to Normal or Incognito windows via regex and instantly toggle modes.",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
