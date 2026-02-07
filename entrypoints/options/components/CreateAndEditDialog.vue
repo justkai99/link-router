@@ -32,6 +32,18 @@ interface Props {
 
 const { type, ruleItem, rules } = defineProps<Props>();
 const open = defineModel<boolean>("open");
+const regexpInput = ref<HTMLInputElement | null>(null);
+const testUrl = ref("");
+
+const testResult = computed(() => {
+  if (!testUrl.value.trim()) return null;
+  try {
+    const regex = new RegExp(regexp.value || "");
+    return regex.test(testUrl.value);
+  } catch {
+    return null;
+  }
+});
 
 // 定义验证规则
 const formSchema = toTypedSchema(
@@ -53,7 +65,7 @@ const formSchema = toTypedSchema(
       .max(128, "Description is too long"),
     openIn: z.enum(OpenIn),
     enabled: z.boolean().optional(),
-  })
+  }),
 );
 
 // 创建表单实例
@@ -117,12 +129,19 @@ const edit = async (formData: RuleItem) => {
 const close = () => {
   open.value = false;
 };
+
+watch(open, async (value) => {
+  if (!value) return;
+  testUrl.value = "";
+  await nextTick();
+  regexpInput.value?.focus();
+});
 </script>
 
 <template>
   <Dialog v-model:open="open">
     <form class="w-full max-w-md space-y-6">
-      <DialogContent class="sm:max-w-[425px]">
+      <DialogContent class="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle>{{ type }} Rule</DialogTitle>
         </DialogHeader>
@@ -131,11 +150,16 @@ const close = () => {
           <FieldLabel for="regexp">RegExp</FieldLabel>
           <Input
             id="regexp"
+            ref="regexpInput"
             v-model="regexp"
             v-bind="regexpAttrs"
             placeholder="Please input"
             :aria-invalid="!!errors.regexp"
           />
+          <FieldDescription>
+            Use a valid JavaScript RegExp (e.g.
+            <code>^https://mail.google.com</code>).
+          </FieldDescription>
           <FieldError v-if="errors.regexp">
             {{ errors.regexp }}
           </FieldError>
@@ -147,7 +171,7 @@ const close = () => {
             id="description"
             v-model="description"
             v-bind="descriptionAttrs"
-            placeholder="Please input"
+            placeholder="e.g. Work sites"
             :aria-invalid="!!errors.description"
           />
           <FieldError v-if="errors.description">
@@ -171,6 +195,24 @@ const close = () => {
               <Label for="r3">Ignore (Do nothing)</Label>
             </span>
           </RadioGroup>
+        </Field>
+
+        <Field>
+          <FieldLabel for="test-url">Test URL (optional)</FieldLabel>
+          <Input
+            id="test-url"
+            v-model="testUrl"
+            placeholder="https://example.com/path"
+          />
+          <FieldDescription>
+            {{
+              testResult === null
+                ? "Try an example URL to verify the pattern."
+                : testResult
+                  ? "Matches the pattern."
+                  : "Does not match the pattern."
+            }}
+          </FieldDescription>
         </Field>
 
         <Field>

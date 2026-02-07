@@ -8,18 +8,50 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Chromium, HatGlasses, CircleSlash } from "lucide-vue-next";
+import {
+  Chromium,
+  HatGlasses,
+  CircleSlash,
+  ArrowUp,
+  ArrowDown,
+  Pencil,
+  MoreHorizontal,
+  Copy,
+  ArrowUpToLine,
+  ArrowDownToLine,
+  Trash2,
+} from "lucide-vue-next";
 import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./CreateAndEditDialog.vue";
+import { uuid } from "@/lib/utils";
 
-const { rules } = defineProps<{ rules: RuleItem[] }>();
+const emit = defineEmits<{
+  (e: "create"): void;
+  (e: "clear-filters"): void;
+}>();
+
+const { rules, sourceRules } = defineProps<{
+  rules: RuleItem[];
+  sourceRules: RuleItem[];
+}>();
 
 const open = ref(false);
+const deleteDialogOpen = ref(false);
+const deletingRule = ref<RuleItem | null>(null);
 
 const editRuleItem = ref<RuleItem | null>(null);
 
@@ -28,20 +60,64 @@ const edit = (ruleItem: RuleItem) => {
   editRuleItem.value = ruleItem;
 };
 
-const moveRule = async (fromIndex: number, toIndex: number) => {
-  if (toIndex < 0 || toIndex >= rules.length) return;
-  const [moved] = rules.splice(fromIndex, 1);
-  rules.splice(toIndex, 0, moved);
-  await storage.setItem("local:rules", JSON.stringify(rules));
+const saveRules = async () => {
+  await storage.setItem("local:rules", JSON.stringify(sourceRules));
 };
 
-const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
-  const index = rules.findIndex((r) => r.id === ruleItem.id);
+const getRuleIndex = (ruleItem: RuleItem) =>
+  sourceRules.findIndex((rule) => rule.id === ruleItem.id);
+
+const moveRule = async (fromIndex: number, toIndex: number) => {
+  if (fromIndex < 0) return;
+  if (toIndex < 0 || toIndex >= sourceRules.length) return;
+  const [moved] = sourceRules.splice(fromIndex, 1);
+  sourceRules.splice(toIndex, 0, moved);
+  await saveRules();
+};
+
+const deleteRule = async (ruleItem: RuleItem) => {
+  const index = getRuleIndex(ruleItem);
   if (index !== -1) {
-    rules.splice(index, 1);
-    await storage.setItem("local:rules", JSON.stringify(rules));
-    close();
+    sourceRules.splice(index, 1);
+    await saveRules();
   }
+};
+
+const requestDeleteRule = (ruleItem: RuleItem) => {
+  deletingRule.value = ruleItem;
+  deleteDialogOpen.value = true;
+};
+
+const confirmDeleteRule = async () => {
+  if (!deletingRule.value) return;
+  await deleteRule(deletingRule.value);
+  deleteDialogOpen.value = false;
+  deletingRule.value = null;
+};
+
+const cancelDeleteRule = () => {
+  deleteDialogOpen.value = false;
+  deletingRule.value = null;
+};
+
+const toggleEnabled = async (ruleItem: RuleItem, value: boolean) => {
+  ruleItem.enabled = value;
+  ruleItem.updatedAt = new Date().toISOString();
+  await saveRules();
+};
+
+const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
+  const index = getRuleIndex(ruleItem);
+  if (index === -1) return;
+  const cloned: RuleItem = {
+    ...ruleItem,
+    id: uuid(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  sourceRules.splice(index + 1, 0, cloned);
+  await saveRules();
+  close();
 };
 </script>
 
@@ -62,12 +138,13 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
 
     <TableBody>
       <TableRow
-        v-for="(ruleItem, index) in rules"
+        v-for="ruleItem in rules"
         :key="ruleItem.id"
-        class="align-top"
+        class="align-top cursor-pointer transition-colors hover:bg-slate-50"
+        @click="edit(ruleItem)"
       >
         <TableCell class="font-medium w-[50px]">
-          {{ index + 1 }}
+          {{ getRuleIndex(ruleItem) + 1 }}
         </TableCell>
 
         <!-- RegExp: truncate with tooltip for long values -->
@@ -107,21 +184,18 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
 
         <!-- Enabled: clear visual indicator -->
         <TableCell class="text-center">
-          <span
-            :class="
-              ruleItem.enabled
-                ? 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sm bg-green-100 text-green-800'
-                : 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sm bg-red-100 text-red-800'
-            "
-            :aria-pressed="ruleItem.enabled ? 'true' : 'false'"
-            :title="ruleItem.enabled ? 'Enabled' : 'Disabled'"
-          >
-            <span v-if="ruleItem.enabled">✓</span>
-            <span v-else>✗</span>
-            <span class="ml-1">{{
-              ruleItem.enabled ? "Enabled" : "Disabled"
-            }}</span>
-          </span>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <Checkbox
+              v-model="ruleItem.enabled"
+              @click.stop
+              @update:modelValue="
+                (value) => toggleEnabled(ruleItem, value === true)
+              "
+            />
+            <span class="text-slate-600">
+              {{ ruleItem.enabled ? "Enabled" : "Disabled" }}
+            </span>
+          </label>
         </TableCell>
 
         <!-- Dates: formatted, fallback to '-' -->
@@ -141,61 +215,105 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
         </TableCell>
 
         <!-- Operations: Edit + Delete with confirmation -->
-        <TableCell class="space-x-2">
+        <TableCell class="space-x-2" @click.stop>
           <Button
             variant="link"
             size="sm"
-            :disabled="index === 0"
-            @click="moveRule(index, index - 1)"
+            :disabled="getRuleIndex(ruleItem) === 0"
+            @click.stop="
+              moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) - 1)
+            "
             aria-label="Move rule up"
             title="Move up"
           >
+            <ArrowUp class="size-4" />
             Up
           </Button>
           <Button
             variant="link"
             size="sm"
-            :disabled="index === rules.length - 1"
-            @click="moveRule(index, index + 1)"
+            :disabled="getRuleIndex(ruleItem) === sourceRules.length - 1"
+            @click.stop="
+              moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) + 1)
+            "
             aria-label="Move rule down"
             title="Move down"
           >
+            <ArrowDown class="size-4" />
             Down
           </Button>
 
           <Button
             variant="link"
             size="sm"
-            @click="edit(ruleItem)"
+            @click.stop="edit(ruleItem)"
             aria-label="Edit rule"
             title="Edit"
           >
+            <Pencil class="size-4" />
             Edit
           </Button>
 
           <Popover v-slot="{ close }">
-            <PopoverTrigger>
+            <PopoverTrigger as-child>
               <Button
-                variant="link"
+                variant="outline"
                 size="sm"
-                class="text-red-600"
-                aria-label="Delete rule"
-                title="Delete"
+                aria-label="More actions"
+                title="More actions"
               >
-                Delete
+                <MoreHorizontal class="size-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent class="w-56">
-              <p class="text-sm">Are you sure you want to delete this rule?</p>
-              <div class="mt-4 flex justify-end space-x-2">
-                <Button variant="outline" size="sm" @click="close"
-                  >Cancel</Button
-                >
+            <PopoverContent class="w-56 p-2">
+              <div class="flex flex-col gap-1">
                 <Button
-                  variant="destructive"
+                  variant="ghost"
                   size="sm"
-                  @click="deleteRule(ruleItem, close)"
+                  class="justify-start"
+                  @click.stop.prevent="duplicateRule(ruleItem, close)"
                 >
+                  <Copy class="size-4" />
+                  Duplicate
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  class="justify-start"
+                  :disabled="getRuleIndex(ruleItem) === 0"
+                  @click.stop.prevent="
+                    moveRule(getRuleIndex(ruleItem), 0);
+                    close();
+                  "
+                >
+                  <ArrowUpToLine class="size-4" />
+                  Move to top
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  class="justify-start"
+                  :disabled="
+                    getRuleIndex(ruleItem) === sourceRules.length - 1
+                  "
+                  @click.stop.prevent="
+                    moveRule(getRuleIndex(ruleItem), sourceRules.length - 1);
+                    close();
+                  "
+                >
+                  <ArrowDownToLine class="size-4" />
+                  Move to bottom
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  class="justify-start text-red-600 hover:text-red-700"
+                  @click.stop.prevent="
+                    requestDeleteRule(ruleItem);
+                    close();
+                  "
+                >
+                  <Trash2 class="size-4" />
                   Delete
                 </Button>
               </div>
@@ -208,7 +326,21 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
       <TableRow v-if="rules.length === 0">
         <TableCell colspan="8" class="text-center py-6">
           <div class="text-sm text-slate-500">
-            No rules found. Create your first rule to get started.
+            <template v-if="sourceRules.length === 0">
+              <div class="font-medium text-slate-700">No rules yet.</div>
+              <div class="mt-1">
+                Example: <code class="rounded bg-slate-100 px-1 py-0.5">^https://mail.google.com</code>
+              </div>
+              <Button class="mt-3" @click.stop="emit('create')">
+                Create your first rule
+              </Button>
+            </template>
+            <template v-else>
+              No matching rules.
+              <Button variant="link" size="sm" @click.stop="emit('clear-filters')">
+                Clear filters
+              </Button>
+            </template>
           </div>
         </TableCell>
       </TableRow>
@@ -219,7 +351,25 @@ const deleteRule = async (ruleItem: RuleItem, close: () => void) => {
     v-if="open"
     :type="DialogType.Edit"
     :rule-item="editRuleItem"
-    :rules="rules"
+    :rules="sourceRules"
     v-model:open="open"
   />
+
+  <Dialog v-model:open="deleteDialogOpen">
+    <DialogContent class="sm:max-w-[420px]">
+      <DialogHeader>
+        <DialogTitle>Delete Rule</DialogTitle>
+        <DialogDescription>
+          This action cannot be undone. The selected rule will be permanently
+          removed.
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button variant="outline" @click="cancelDeleteRule">Cancel</Button>
+        <Button variant="destructive" @click="confirmDeleteRule">
+          Delete
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
