@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "정규식 규칙에 따라 링크를 일반 창 또는 시크릿 창으로 자동 라우팅하고, 모드를 즉시 전환합니다."
+  },
+  "commandOpenPanelDescription": { "message": "확장 프로그램 패널 열기" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Ignore 규칙은 순서와 상관없이 항상 다른 모든 규칙보다 우선합니다."
+  },
+  "ignoreRuleCountOne": { "message": "Ignore 규칙 $1개" },
+  "ignoreRuleCountOther": { "message": "Ignore 규칙 $1개" },
+
+  "searchPlaceholder": { "message": "RegExp 또는 설명으로 검색" },
+  "searchAriaLabel": { "message": "규칙 검색" },
+  "importJson": { "message": "JSON 가져오기" },
+  "exportJson": { "message": "JSON 내보내기" },
+  "create": { "message": "생성" },
+
+  "filters": { "message": "필터" },
+  "openIn": { "message": "열기 위치" },
+  "status": { "message": "상태" },
+  "all": { "message": "전체" },
+  "normal": { "message": "일반" },
+  "incognito": { "message": "시크릿" },
+  "ignore": { "message": "무시" },
+  "enabled": { "message": "사용" },
+  "disabled": { "message": "사용 안 함" },
+  "rulesSummary": { "message": "규칙 $1개 · 비활성화 $2개" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "설명" },
+  "createdAt": { "message": "생성일" },
+  "updatedAt": { "message": "수정일" },
+  "operations": { "message": "작업" },
+  "highestPriority": { "message": "최우선" },
+
+  "shadowingWarning": {
+    "message": "다음 Ignore 규칙 때문에 적용되지 않을 수 있습니다: $1"
+  },
+  "moveRuleUpAria": { "message": "규칙 위로 이동" },
+  "moveRuleDownAria": { "message": "규칙 아래로 이동" },
+  "moveUp": { "message": "위로" },
+  "moveDown": { "message": "아래로" },
+  "ignoreOrderingHint": {
+    "message": "Ignore 규칙은 non-ignore 규칙보다 항상 우선합니다. 순서는 Ignore 규칙끼리만 의미가 있습니다."
+  },
+
+  "editRuleAria": { "message": "규칙 편집" },
+  "edit": { "message": "편집" },
+  "moreActionsAria": { "message": "추가 작업" },
+  "moreActions": { "message": "추가 작업" },
+  "duplicate": { "message": "복제" },
+  "moveToTop": { "message": "맨 위로 이동" },
+  "moveToBottom": { "message": "맨 아래로 이동" },
+  "delete": { "message": "삭제" },
+
+  "noRulesYet": { "message": "아직 규칙이 없습니다." },
+  "example": { "message": "예시:" },
+  "createFirstRule": { "message": "첫 규칙 만들기" },
+  "noMatchingRules": { "message": "일치하는 규칙이 없습니다." },
+  "clearFilters": { "message": "필터 지우기" },
+
+  "deleteRuleTitle": { "message": "규칙 삭제" },
+  "deleteRuleDescription": {
+    "message": "이 작업은 되돌릴 수 없습니다. 선택한 규칙이 영구적으로 삭제됩니다."
+  },
+  "cancel": { "message": "취소" },
+  "save": { "message": "저장" },
+
+  "createRuleTitle": { "message": "규칙 생성" },
+  "editRuleTitle": { "message": "규칙 편집" },
+  "inputPlaceholder": { "message": "입력하세요" },
+  "descriptionPlaceholder": { "message": "예: 업무 사이트" },
+  "regexpHelp": {
+    "message": "유효한 JavaScript RegExp를 사용하세요(예: ^https://mail.google.com)."
+  },
+  "ignoreDoNothing": { "message": "무시(아무 작업 안 함)" },
+  "ignorePriorityHelp": {
+    "message": "Ignore는 전역 최우선입니다. 일치하면 라우팅을 중지합니다."
+  },
+
+  "testUrlOptional": { "message": "테스트 URL(선택)" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "예시 URL을 입력해 패턴을 확인하세요." },
+  "testUrlMatch": { "message": "패턴과 일치합니다." },
+  "testUrlNoMatch": { "message": "패턴과 일치하지 않습니다." },
+
+  "regexpRequired": { "message": "RegExp는 필수입니다" },
+  "regexpInvalid": { "message": "유효하지 않은 RegExp 패턴입니다" },
+  "descriptionRequired": { "message": "설명은 필수입니다" },
+  "descriptionTooLong": { "message": "설명이 너무 깁니다" },
+
+  "importInvalidFormat": {
+    "message": "잘못된 JSON 형식입니다. RuleItem[] 또는 { rules: RuleItem[] } 형식이어야 합니다."
+  },
+  "importNoValidRules": { "message": "파일에서 유효한 규칙을 찾을 수 없습니다." },
+  "importReplaceConfirm": {
+    "message": "가져오기를 진행하면 현재 규칙 $1개를 덮어씁니다. 계속할까요?"
+  },
+  "importFailed": {
+    "message": "규칙 가져오기에 실패했습니다. JSON 형식을 확인하세요."
+  },
+
+  "notAvailable": { "message": "-" }
+}

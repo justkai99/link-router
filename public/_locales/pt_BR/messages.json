@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "Roteia links automaticamente para janelas normais ou anônimas via regex e alterna o modo instantaneamente."
+  },
+  "commandOpenPanelDescription": { "message": "Abrir painel da extensão" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Regras Ignore sempre têm prioridade sobre todas as outras, independentemente da ordem."
+  },
+  "ignoreRuleCountOne": { "message": "$1 regra Ignore" },
+  "ignoreRuleCountOther": { "message": "$1 regras Ignore" },
+
+  "searchPlaceholder": { "message": "Buscar por RegExp ou descrição" },
+  "searchAriaLabel": { "message": "Buscar regras" },
+  "importJson": { "message": "Importar JSON" },
+  "exportJson": { "message": "Exportar JSON" },
+  "create": { "message": "Criar" },
+
+  "filters": { "message": "Filtros" },
+  "openIn": { "message": "Abrir em" },
+  "status": { "message": "Status" },
+  "all": { "message": "Todos" },
+  "normal": { "message": "Normal" },
+  "incognito": { "message": "Anônimo" },
+  "ignore": { "message": "Ignorar" },
+  "enabled": { "message": "Ativado" },
+  "disabled": { "message": "Desativado" },
+  "rulesSummary": { "message": "$1 regras · $2 desativadas" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "Descrição" },
+  "createdAt": { "message": "Criado em" },
+  "updatedAt": { "message": "Atualizado em" },
+  "operations": { "message": "Operações" },
+  "highestPriority": { "message": "Maior prioridade" },
+
+  "shadowingWarning": {
+    "message": "Pode nunca entrar em vigor por causa da regra Ignore: $1"
+  },
+  "moveRuleUpAria": { "message": "Mover regra para cima" },
+  "moveRuleDownAria": { "message": "Mover regra para baixo" },
+  "moveUp": { "message": "Subir" },
+  "moveDown": { "message": "Descer" },
+  "ignoreOrderingHint": {
+    "message": "Regras Ignore sempre sobrescrevem regras não-ignore; a ordem só importa entre regras Ignore."
+  },
+
+  "editRuleAria": { "message": "Editar regra" },
+  "edit": { "message": "Editar" },
+  "moreActionsAria": { "message": "Mais ações" },
+  "moreActions": { "message": "Mais ações" },
+  "duplicate": { "message": "Duplicar" },
+  "moveToTop": { "message": "Mover para o topo" },
+  "moveToBottom": { "message": "Mover para o fim" },
+  "delete": { "message": "Excluir" },
+
+  "noRulesYet": { "message": "Ainda não há regras." },
+  "example": { "message": "Exemplo:" },
+  "createFirstRule": { "message": "Criar sua primeira regra" },
+  "noMatchingRules": { "message": "Nenhuma regra correspondente." },
+  "clearFilters": { "message": "Limpar filtros" },
+
+  "deleteRuleTitle": { "message": "Excluir regra" },
+  "deleteRuleDescription": {
+    "message": "Esta ação não pode ser desfeita. A regra selecionada será removida permanentemente."
+  },
+  "cancel": { "message": "Cancelar" },
+  "save": { "message": "Salvar" },
+
+  "createRuleTitle": { "message": "Criar regra" },
+  "editRuleTitle": { "message": "Editar regra" },
+  "inputPlaceholder": { "message": "Digite aqui" },
+  "descriptionPlaceholder": { "message": "ex.: Sites de trabalho" },
+  "regexpHelp": {
+    "message": "Use uma RegExp JavaScript válida (ex.: ^https://mail.google.com)."
+  },
+  "ignoreDoNothing": { "message": "Ignorar (Não fazer nada)" },
+  "ignorePriorityHelp": {
+    "message": "Ignore tem prioridade global e impedirá o roteamento quando houver correspondência."
+  },
+
+  "testUrlOptional": { "message": "URL de teste (opcional)" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "Teste com uma URL para validar o padrão." },
+  "testUrlMatch": { "message": "Corresponde ao padrão." },
+  "testUrlNoMatch": { "message": "Não corresponde ao padrão." },
+
+  "regexpRequired": { "message": "RegExp é obrigatório" },
+  "regexpInvalid": { "message": "Padrão RegExp inválido" },
+  "descriptionRequired": { "message": "Descrição é obrigatória" },
+  "descriptionTooLong": { "message": "Descrição é muito longa" },
+
+  "importInvalidFormat": {
+    "message": "Formato JSON inválido. Esperado RuleItem[] ou { rules: RuleItem[] }."
+  },
+  "importNoValidRules": { "message": "Nenhuma regra válida encontrada no arquivo." },
+  "importReplaceConfirm": {
+    "message": "A importação substituirá as $1 regras atuais. Continuar?"
+  },
+  "importFailed": {
+    "message": "Falha ao importar regras. Verifique o formato JSON."
+  },
+
+  "notAvailable": { "message": "-" }
+}

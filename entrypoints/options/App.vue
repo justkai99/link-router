@@ -6,6 +6,7 @@ import Button from "@/components/ui/button/Button.vue";
 import RulesTable from "./components/RulesTable.vue";
 import { Input } from "@/components/ui/input";
 import { uuid } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 const rules = ref<RuleItem[]>([]);
 const importInputRef = ref<HTMLInputElement | null>(null);
@@ -20,7 +21,15 @@ const ignoreCount = computed(
   () => rules.value.filter((rule) => rule.openIn === OpenIn.Ignore).length,
 );
 const disabledCount = computed(
-  () => rules.value.filter((rule) => !rule.enabled).length
+  () => rules.value.filter((rule) => !rule.enabled).length,
+);
+const ignoreCountLabel = computed(() =>
+  ignoreCount.value === 1
+    ? t("ignoreRuleCountOne", ignoreCount.value)
+    : t("ignoreRuleCountOther", ignoreCount.value),
+);
+const rulesSummaryLabel = computed(() =>
+  t("rulesSummary", [totalCount.value, disabledCount.value]),
 );
 
 const filteredRules = computed(() => {
@@ -110,7 +119,7 @@ const handleImportFile = async (event: Event) => {
         ? parsed.rules
         : null;
     if (!rawRules) {
-      alert("Invalid JSON format. Expect RuleItem[] or { rules: RuleItem[] }.");
+      alert(t("importInvalidFormat"));
       return;
     }
 
@@ -119,15 +128,13 @@ const handleImportFile = async (event: Event) => {
       .filter((item): item is RuleItem => item !== null);
 
     if (normalizedRules.length === 0) {
-      alert("No valid rules found in file.");
+      alert(t("importNoValidRules"));
       return;
     }
 
     if (
       rules.value.length > 0 &&
-      !window.confirm(
-        `Import will replace current ${rules.value.length} rules. Continue?`,
-      )
+      !window.confirm(t("importReplaceConfirm", rules.value.length))
     ) {
       return;
     }
@@ -136,7 +143,7 @@ const handleImportFile = async (event: Event) => {
     await storage.setItem("local:rules", JSON.stringify(normalizedRules));
   } catch (error) {
     console.error("Failed to import rules:", error);
-    alert("Failed to import rules. Please check JSON format.");
+    alert(t("importFailed"));
   } finally {
     input.value = "";
   }
@@ -156,122 +163,122 @@ onMounted(async () => {
 <template>
   <div class="options-shell">
     <div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-      Ignore rules always override all other rules, regardless of order.
+      {{ t("ignorePriorityNotice") }}
       <span class="ml-2 font-medium">
-        {{ ignoreCount }} ignore {{ ignoreCount === 1 ? "rule" : "rules" }}
+        {{ ignoreCountLabel }}
       </span>
     </div>
     <div class="mb-4 flex flex-col gap-3 options-panel p-3">
-    <div class="flex flex-wrap items-center gap-2">
-      <div class="relative flex-1 min-w-[220px]">
-        <Search class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-teal-600" />
-        <Input
-          v-model="searchQuery"
-          class="pl-9"
-          placeholder="Search by RegExp or description"
-          aria-label="Search rules"
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="relative flex-1 min-w-[220px]">
+          <Search class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-teal-600" />
+          <Input
+            v-model="searchQuery"
+            class="pl-9"
+            :placeholder="t('searchPlaceholder')"
+            :aria-label="t('searchAriaLabel')"
+          />
+        </div>
+        <input
+          ref="importInputRef"
+          type="file"
+          accept="application/json,.json"
+          class="hidden"
+          @change="handleImportFile"
         />
+        <Button variant="outline" @click="openImportFilePicker">
+          <Upload />
+          {{ t("importJson") }}
+        </Button>
+        <Button variant="outline" @click="exportRules">
+          <Download />
+          {{ t("exportJson") }}
+        </Button>
+        <Button @click="open = true">
+          <Plus />
+          {{ t("create") }}
+        </Button>
       </div>
-      <input
-        ref="importInputRef"
-        type="file"
-        accept="application/json,.json"
-        class="hidden"
-        @change="handleImportFile"
+      <div class="flex flex-wrap items-center gap-3 text-sm">
+        <div class="flex items-center gap-2 text-teal-700">
+          <Filter class="size-4" />
+          <span>{{ t("filters") }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1">
+          <span class="mr-1 text-xs font-medium text-slate-500">{{ t("openIn") }}</span>
+          <Button
+            size="sm"
+            :variant="openInFilter === 'all' ? 'secondary' : 'outline'"
+            :aria-pressed="openInFilter === 'all'"
+            @click="openInFilter = 'all'"
+          >
+            {{ t("all") }}
+          </Button>
+          <Button
+            size="sm"
+            :variant="openInFilter === OpenIn.Normal ? 'secondary' : 'outline'"
+            :aria-pressed="openInFilter === OpenIn.Normal"
+            @click="openInFilter = OpenIn.Normal"
+          >
+            {{ t("normal") }}
+          </Button>
+          <Button
+            size="sm"
+            :variant="openInFilter === OpenIn.Incognito ? 'secondary' : 'outline'"
+            :aria-pressed="openInFilter === OpenIn.Incognito"
+            @click="openInFilter = OpenIn.Incognito"
+          >
+            {{ t("incognito") }}
+          </Button>
+          <Button
+            size="sm"
+            :variant="openInFilter === OpenIn.Ignore ? 'secondary' : 'outline'"
+            :aria-pressed="openInFilter === OpenIn.Ignore"
+            @click="openInFilter = OpenIn.Ignore"
+          >
+            {{ t("ignore") }}
+          </Button>
+        </div>
+        <div class="flex flex-wrap items-center gap-1">
+          <span class="mr-1 text-xs font-medium text-slate-500">{{ t("status") }}</span>
+          <Button
+            size="sm"
+            :variant="enabledFilter === 'all' ? 'secondary' : 'outline'"
+            :aria-pressed="enabledFilter === 'all'"
+            @click="enabledFilter = 'all'"
+          >
+            {{ t("all") }}
+          </Button>
+          <Button
+            size="sm"
+            :variant="enabledFilter === 'enabled' ? 'secondary' : 'outline'"
+            :aria-pressed="enabledFilter === 'enabled'"
+            @click="enabledFilter = 'enabled'"
+          >
+            {{ t("enabled") }}
+          </Button>
+          <Button
+            size="sm"
+            :variant="enabledFilter === 'disabled' ? 'secondary' : 'outline'"
+            :aria-pressed="enabledFilter === 'disabled'"
+            @click="enabledFilter = 'disabled'"
+          >
+            {{ t("disabled") }}
+          </Button>
+        </div>
+        <div class="options-muted-chip rounded-md px-2 py-1 text-sm md:ml-auto">
+          {{ rulesSummaryLabel }}
+        </div>
+      </div>
+    </div>
+    <div class="options-panel p-2">
+      <RulesTable
+        :rules="filteredRules"
+        :source-rules="rules"
+        @create="open = true"
+        @clear-filters="clearFilters"
       />
-      <Button variant="outline" @click="openImportFilePicker">
-        <Upload />
-        Import JSON
-      </Button>
-      <Button variant="outline" @click="exportRules">
-        <Download />
-        Export JSON
-      </Button>
-      <Button @click="open = true">
-        <Plus />
-        Create
-      </Button>
     </div>
-    <div class="flex flex-wrap items-center gap-3 text-sm">
-      <div class="flex items-center gap-2 text-teal-700">
-        <Filter class="size-4" />
-        <span>Filters</span>
-      </div>
-      <div class="flex flex-wrap items-center gap-1">
-        <span class="mr-1 text-xs font-medium text-slate-500">Open In</span>
-        <Button
-          size="sm"
-          :variant="openInFilter === 'all' ? 'secondary' : 'outline'"
-          aria-pressed="openInFilter === 'all'"
-          @click="openInFilter = 'all'"
-        >
-          All
-        </Button>
-        <Button
-          size="sm"
-          :variant="openInFilter === OpenIn.Normal ? 'secondary' : 'outline'"
-          aria-pressed="openInFilter === OpenIn.Normal"
-          @click="openInFilter = OpenIn.Normal"
-        >
-          Normal
-        </Button>
-        <Button
-          size="sm"
-          :variant="openInFilter === OpenIn.Incognito ? 'secondary' : 'outline'"
-          aria-pressed="openInFilter === OpenIn.Incognito"
-          @click="openInFilter = OpenIn.Incognito"
-        >
-          Incognito
-        </Button>
-        <Button
-          size="sm"
-          :variant="openInFilter === OpenIn.Ignore ? 'secondary' : 'outline'"
-          aria-pressed="openInFilter === OpenIn.Ignore"
-          @click="openInFilter = OpenIn.Ignore"
-        >
-          Ignore
-        </Button>
-      </div>
-      <div class="flex flex-wrap items-center gap-1">
-        <span class="mr-1 text-xs font-medium text-slate-500">Status</span>
-        <Button
-          size="sm"
-          :variant="enabledFilter === 'all' ? 'secondary' : 'outline'"
-          aria-pressed="enabledFilter === 'all'"
-          @click="enabledFilter = 'all'"
-        >
-          All
-        </Button>
-        <Button
-          size="sm"
-          :variant="enabledFilter === 'enabled' ? 'secondary' : 'outline'"
-          aria-pressed="enabledFilter === 'enabled'"
-          @click="enabledFilter = 'enabled'"
-        >
-          Enabled
-        </Button>
-        <Button
-          size="sm"
-          :variant="enabledFilter === 'disabled' ? 'secondary' : 'outline'"
-          aria-pressed="enabledFilter === 'disabled'"
-          @click="enabledFilter = 'disabled'"
-        >
-          Disabled
-        </Button>
-      </div>
-      <div class="options-muted-chip rounded-md px-2 py-1 text-sm md:ml-auto">
-        {{ totalCount }} rules · {{ disabledCount }} disabled
-      </div>
-    </div>
-  </div>
-  <div class="options-panel p-2">
-    <RulesTable
-      :rules="filteredRules"
-      :source-rules="rules"
-      @create="open = true"
-      @clear-filters="clearFilters"
-    />
-  </div>
   </div>
   <CreateAndEditDialog
     v-if="open"

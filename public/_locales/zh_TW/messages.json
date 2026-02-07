@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "根據正則規則自動將連結路由到一般視窗或無痕視窗，並可一鍵切換模式。"
+  },
+  "commandOpenPanelDescription": { "message": "開啟擴充功能面板" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Ignore 規則無論順序如何，都會覆蓋所有其他規則。"
+  },
+  "ignoreRuleCountOne": { "message": "$1 條 Ignore 規則" },
+  "ignoreRuleCountOther": { "message": "$1 條 Ignore 規則" },
+
+  "searchPlaceholder": { "message": "依 RegExp 或描述搜尋" },
+  "searchAriaLabel": { "message": "搜尋規則" },
+  "importJson": { "message": "匯入 JSON" },
+  "exportJson": { "message": "匯出 JSON" },
+  "create": { "message": "新增" },
+
+  "filters": { "message": "篩選" },
+  "openIn": { "message": "開啟方式" },
+  "status": { "message": "狀態" },
+  "all": { "message": "全部" },
+  "normal": { "message": "一般" },
+  "incognito": { "message": "無痕" },
+  "ignore": { "message": "忽略" },
+  "enabled": { "message": "啟用" },
+  "disabled": { "message": "停用" },
+  "rulesSummary": { "message": "$1 條規則 · $2 條已停用" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "描述" },
+  "createdAt": { "message": "建立時間" },
+  "updatedAt": { "message": "更新時間" },
+  "operations": { "message": "操作" },
+  "highestPriority": { "message": "最高優先級" },
+
+  "shadowingWarning": {
+    "message": "可能永遠不會生效，因為被 Ignore 規則覆蓋：$1"
+  },
+  "moveRuleUpAria": { "message": "上移規則" },
+  "moveRuleDownAria": { "message": "下移規則" },
+  "moveUp": { "message": "上移" },
+  "moveDown": { "message": "下移" },
+  "ignoreOrderingHint": {
+    "message": "Ignore 規則永遠覆蓋非 Ignore 規則；順序只在 Ignore 規則之間生效。"
+  },
+
+  "editRuleAria": { "message": "編輯規則" },
+  "edit": { "message": "編輯" },
+  "moreActionsAria": { "message": "更多操作" },
+  "moreActions": { "message": "更多操作" },
+  "duplicate": { "message": "複製" },
+  "moveToTop": { "message": "移至頂端" },
+  "moveToBottom": { "message": "移至底端" },
+  "delete": { "message": "刪除" },
+
+  "noRulesYet": { "message": "尚無規則。" },
+  "example": { "message": "範例：" },
+  "createFirstRule": { "message": "建立第一條規則" },
+  "noMatchingRules": { "message": "沒有符合的規則。" },
+  "clearFilters": { "message": "清除篩選" },
+
+  "deleteRuleTitle": { "message": "刪除規則" },
+  "deleteRuleDescription": {
+    "message": "此操作無法復原。所選規則將被永久刪除。"
+  },
+  "cancel": { "message": "取消" },
+  "save": { "message": "儲存" },
+
+  "createRuleTitle": { "message": "建立規則" },
+  "editRuleTitle": { "message": "編輯規則" },
+  "inputPlaceholder": { "message": "請輸入" },
+  "descriptionPlaceholder": { "message": "例如：工作網站" },
+  "regexpHelp": {
+    "message": "請使用有效的 JavaScript 正則表達式（例如：^https://mail.google.com）。"
+  },
+  "ignoreDoNothing": { "message": "忽略（不執行任何操作）" },
+  "ignorePriorityHelp": {
+    "message": "Ignore 具有全域最高優先級，符合後將阻止路由。"
+  },
+
+  "testUrlOptional": { "message": "測試 URL（選填）" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "輸入範例 URL 以驗證規則。" },
+  "testUrlMatch": { "message": "符合此規則。" },
+  "testUrlNoMatch": { "message": "不符合此規則。" },
+
+  "regexpRequired": { "message": "RegExp 不可為空" },
+  "regexpInvalid": { "message": "RegExp 格式無效" },
+  "descriptionRequired": { "message": "描述不可為空" },
+  "descriptionTooLong": { "message": "描述過長" },
+
+  "importInvalidFormat": {
+    "message": "JSON 格式無效。應為 RuleItem[] 或 { rules: RuleItem[] }。"
+  },
+  "importNoValidRules": { "message": "檔案中沒有有效規則。" },
+  "importReplaceConfirm": {
+    "message": "匯入將取代目前的 $1 條規則。要繼續嗎？"
+  },
+  "importFailed": {
+    "message": "匯入規則失敗，請檢查 JSON 格式。"
+  },
+
+  "notAvailable": { "message": "-" }
+}

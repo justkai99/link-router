@@ -38,6 +38,7 @@ import {
 import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import CreateAndEditDialog from "./CreateAndEditDialog.vue";
 import { uuid } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 const emit = defineEmits<{
   (e: "create"): void;
@@ -98,9 +99,7 @@ const getShadowingIgnoreRule = (ruleItem: RuleItem) => {
 const getShadowingWarning = (ruleItem: RuleItem) => {
   const ignoreRule = getShadowingIgnoreRule(ruleItem);
   if (!ignoreRule) return null;
-  return `May never take effect because of Ignore rule: ${
-    ignoreRule.description || ignoreRule.regexp
-  }`;
+  return t("shadowingWarning", ignoreRule.description || ignoreRule.regexp);
 };
 
 const moveRule = async (fromIndex: number, toIndex: number) => {
@@ -155,20 +154,29 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
   await saveRules();
   close();
 };
+
+const openInLabel = (openIn: OpenIn) => {
+  if (openIn === OpenIn.Incognito) return t("incognito");
+  if (openIn === OpenIn.Ignore) return t("ignore");
+  return t("normal");
+};
+
+const formatDate = (date?: string) =>
+  date ? new Date(date).toLocaleString() : t("notAvailable");
 </script>
 
 <template>
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead class="w-[50px]">#</TableHead>
-        <TableHead>RegExp</TableHead>
-        <TableHead>Description</TableHead>
-        <TableHead class="w-[120px]">Open In</TableHead>
-        <TableHead class="w-[120px]">Enabled</TableHead>
-        <TableHead class="w-[160px]">Created At</TableHead>
-        <TableHead class="w-[160px]">Updated At</TableHead>
-        <TableHead class="w-[150px]">Operations</TableHead>
+        <TableHead class="w-[50px]">{{ t("tableIndex") }}</TableHead>
+        <TableHead>{{ t("regexp") }}</TableHead>
+        <TableHead>{{ t("description") }}</TableHead>
+        <TableHead class="w-[120px]">{{ t("openIn") }}</TableHead>
+        <TableHead class="w-[120px]">{{ t("enabled") }}</TableHead>
+        <TableHead class="w-[160px]">{{ t("createdAt") }}</TableHead>
+        <TableHead class="w-[160px]">{{ t("updatedAt") }}</TableHead>
+        <TableHead class="w-[150px]">{{ t("operations") }}</TableHead>
       </TableRow>
     </TableHeader>
 
@@ -183,7 +191,6 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
           {{ getRuleIndex(ruleItem) + 1 }}
         </TableCell>
 
-        <!-- RegExp: truncate with tooltip for long values -->
         <TableCell class="max-w-xs">
           <div class="truncate" :title="ruleItem.regexp">
             {{ ruleItem.regexp }}
@@ -197,14 +204,12 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
           </div>
         </TableCell>
 
-        <!-- Description: truncate with tooltip -->
         <TableCell class="max-w-sm">
           <div class="truncate" :title="ruleItem.description">
-            {{ ruleItem.description || "-" }}
+            {{ ruleItem.description || t("notAvailable") }}
           </div>
         </TableCell>
 
-        <!-- Open With: styled badge -->
         <TableCell>
           <span
             class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-sm font-medium"
@@ -215,29 +220,28 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   ? 'bg-rose-100 text-rose-900'
                   : 'bg-sky-100 text-sky-900'
             "
-            :title="ruleItem.openIn"
+            :title="openInLabel(ruleItem.openIn)"
           >
             <template v-if="ruleItem.openIn === OpenIn.Incognito">
               <HatGlasses class="inline" :size="18" />
-              Incognito
+              {{ t("incognito") }}
             </template>
             <template v-else-if="ruleItem.openIn === OpenIn.Ignore">
               <CircleSlash class="inline" :size="18" />
-              Ignore
+              {{ t("ignore") }}
               <span
-                class="rounded bg-rose-200 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide"
+                class="rounded bg-rose-200 px-1.5 py-0.5 text-[11px] font-semibold"
               >
-                Highest Priority
+                {{ t("highestPriority") }}
               </span>
             </template>
             <template v-else>
               <Chromium class="inline" :size="18" />
-              Normal
+              {{ t("normal") }}
             </template>
           </span>
         </TableCell>
 
-        <!-- Enabled: clear visual indicator -->
         <TableCell class="text-center">
           <label class="inline-flex items-center gap-2 text-sm">
             <Checkbox
@@ -251,28 +255,18 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
               class="font-medium"
               :class="ruleItem.enabled ? 'text-emerald-700' : 'text-slate-500'"
             >
-              {{ ruleItem.enabled ? "Enabled" : "Disabled" }}
+              {{ ruleItem.enabled ? t("enabled") : t("disabled") }}
             </span>
           </label>
         </TableCell>
 
-        <!-- Dates: formatted, fallback to '-' -->
         <TableCell>
-          {{
-            ruleItem.createdAt
-              ? new Date(ruleItem.createdAt).toLocaleString()
-              : "-"
-          }}
+          {{ formatDate(ruleItem.createdAt) }}
         </TableCell>
         <TableCell>
-          {{
-            ruleItem.updatedAt
-              ? new Date(ruleItem.updatedAt).toLocaleString()
-              : "-"
-          }}
+          {{ formatDate(ruleItem.updatedAt) }}
         </TableCell>
 
-        <!-- Operations: Edit + Delete with confirmation -->
         <TableCell class="space-x-2" @click.stop>
           <Button
             variant="link"
@@ -281,16 +275,16 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
             @click.stop="
               moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) - 1)
             "
-            aria-label="Move rule up"
+            :aria-label="t('moveRuleUpAria')"
             :title="
               ruleItem.openIn === OpenIn.Ignore
-                ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
-                : 'Move up'
+                ? t('ignoreOrderingHint')
+                : t('moveUp')
             "
             :class="ruleItem.openIn === OpenIn.Ignore ? 'text-slate-500' : ''"
           >
             <ArrowUp class="size-4" />
-            Up
+            {{ t("moveUp") }}
           </Button>
           <Button
             variant="link"
@@ -299,27 +293,27 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
             @click.stop="
               moveRule(getRuleIndex(ruleItem), getRuleIndex(ruleItem) + 1)
             "
-            aria-label="Move rule down"
+            :aria-label="t('moveRuleDownAria')"
             :title="
               ruleItem.openIn === OpenIn.Ignore
-                ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
-                : 'Move down'
+                ? t('ignoreOrderingHint')
+                : t('moveDown')
             "
             :class="ruleItem.openIn === OpenIn.Ignore ? 'text-slate-500' : ''"
           >
             <ArrowDown class="size-4" />
-            Down
+            {{ t("moveDown") }}
           </Button>
 
           <Button
             variant="link"
             size="sm"
             @click.stop="edit(ruleItem)"
-            aria-label="Edit rule"
-            title="Edit"
+            :aria-label="t('editRuleAria')"
+            :title="t('edit')"
           >
             <Pencil class="size-4" />
-            Edit
+            {{ t("edit") }}
           </Button>
 
           <Popover v-slot="{ close }">
@@ -327,8 +321,8 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
               <Button
                 variant="outline"
                 size="sm"
-                aria-label="More actions"
-                title="More actions"
+                :aria-label="t('moreActionsAria')"
+                :title="t('moreActions')"
               >
                 <MoreHorizontal class="size-4" />
               </Button>
@@ -342,7 +336,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   @click.stop.prevent="duplicateRule(ruleItem, close)"
                 >
                   <Copy class="size-4" />
-                  Duplicate
+                  {{ t("duplicate") }}
                 </Button>
                 <Button
                   variant="ghost"
@@ -351,8 +345,8 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   :disabled="getRuleIndex(ruleItem) === 0"
                   :title="
                     ruleItem.openIn === OpenIn.Ignore
-                      ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
-                      : 'Move to top'
+                      ? t('ignoreOrderingHint')
+                      : t('moveToTop')
                   "
                   @click.stop.prevent="
                     moveRule(getRuleIndex(ruleItem), 0);
@@ -360,7 +354,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   "
                 >
                   <ArrowUpToLine class="size-4" />
-                  Move to top
+                  {{ t("moveToTop") }}
                 </Button>
                 <Button
                   variant="ghost"
@@ -371,8 +365,8 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   "
                   :title="
                     ruleItem.openIn === OpenIn.Ignore
-                      ? 'Ignore rules always override non-ignore rules; order only matters among Ignore rules.'
-                      : 'Move to bottom'
+                      ? t('ignoreOrderingHint')
+                      : t('moveToBottom')
                   "
                   @click.stop.prevent="
                     moveRule(getRuleIndex(ruleItem), sourceRules.length - 1);
@@ -380,7 +374,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   "
                 >
                   <ArrowDownToLine class="size-4" />
-                  Move to bottom
+                  {{ t("moveToBottom") }}
                 </Button>
                 <Button
                   variant="ghost"
@@ -392,7 +386,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                   "
                 >
                   <Trash2 class="size-4" />
-                  Delete
+                  {{ t("delete") }}
                 </Button>
               </div>
             </PopoverContent>
@@ -400,23 +394,23 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
         </TableCell>
       </TableRow>
 
-      <!-- Empty state -->
       <TableRow v-if="rules.length === 0">
         <TableCell colspan="8" class="text-center py-6">
           <div class="text-sm text-slate-500">
             <template v-if="sourceRules.length === 0">
-              <div class="font-medium text-slate-700">No rules yet.</div>
+              <div class="font-medium text-slate-700">{{ t("noRulesYet") }}</div>
               <div class="mt-1">
-                Example: <code class="rounded bg-cyan-100 px-1 py-0.5 text-cyan-900">^https://mail.google.com</code>
+                {{ t("example") }}
+                <code class="rounded bg-cyan-100 px-1 py-0.5 text-cyan-900">^https://mail.google.com</code>
               </div>
               <Button class="mt-3" @click.stop="emit('create')">
-                Create your first rule
+                {{ t("createFirstRule") }}
               </Button>
             </template>
             <template v-else>
-              No matching rules.
+              {{ t("noMatchingRules") }}
               <Button variant="link" size="sm" @click.stop="emit('clear-filters')">
-                Clear filters
+                {{ t("clearFilters") }}
               </Button>
             </template>
           </div>
@@ -436,16 +430,15 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
   <Dialog v-model:open="deleteDialogOpen">
     <DialogContent class="sm:max-w-[420px]">
       <DialogHeader>
-        <DialogTitle>Delete Rule</DialogTitle>
+        <DialogTitle>{{ t("deleteRuleTitle") }}</DialogTitle>
         <DialogDescription>
-          This action cannot be undone. The selected rule will be permanently
-          removed.
+          {{ t("deleteRuleDescription") }}
         </DialogDescription>
       </DialogHeader>
       <DialogFooter>
-        <Button variant="outline" @click="cancelDeleteRule">Cancel</Button>
+        <Button variant="outline" @click="cancelDeleteRule">{{ t("cancel") }}</Button>
         <Button variant="destructive" @click="confirmDeleteRule">
-          Delete
+          {{ t("delete") }}
         </Button>
       </DialogFooter>
     </DialogContent>

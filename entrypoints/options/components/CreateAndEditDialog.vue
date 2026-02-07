@@ -23,6 +23,7 @@ import { useForm } from "vee-validate";
 import * as z from "zod";
 import { DialogType, OpenIn, RuleItem } from "@/lib/types";
 import { uuid } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 interface Props {
   type: DialogType;
@@ -35,6 +36,10 @@ const open = defineModel<boolean>("open");
 const regexpInput = ref<HTMLInputElement | null>(null);
 const testUrl = ref("");
 
+const dialogTitle = computed(() =>
+  type === DialogType.Create ? t("createRuleTitle") : t("editRuleTitle"),
+);
+
 const testResult = computed(() => {
   if (!testUrl.value.trim()) return null;
   try {
@@ -45,12 +50,16 @@ const testResult = computed(() => {
   }
 });
 
-// 定义验证规则
+const testResultMessage = computed(() => {
+  if (testResult.value === null) return t("testUrlHint");
+  return testResult.value ? t("testUrlMatch") : t("testUrlNoMatch");
+});
+
 const formSchema = toTypedSchema(
   z.object({
     regexp: z
       .string()
-      .min(1, "RegExp is required")
+      .min(1, t("regexpRequired"))
       .refine((value) => {
         try {
           new RegExp(value);
@@ -58,17 +67,16 @@ const formSchema = toTypedSchema(
         } catch {
           return false;
         }
-      }, "Invalid RegExp pattern"),
+      }, t("regexpInvalid")),
     description: z
       .string()
-      .min(1, "Description is required")
-      .max(128, "Description is too long"),
+      .min(1, t("descriptionRequired"))
+      .max(128, t("descriptionTooLong")),
     openIn: z.enum(OpenIn),
     enabled: z.boolean().optional(),
   }),
 );
 
-// 创建表单实例
 const { handleSubmit, errors, defineField } = useForm({
   validationSchema: formSchema,
   initialValues: {
@@ -79,13 +87,11 @@ const { handleSubmit, errors, defineField } = useForm({
   },
 });
 
-// 定义字段
 const [regexp, regexpAttrs] = defineField("regexp");
 const [description, descriptionAttrs] = defineField("description");
 const [openIn, openInAttrs] = defineField("openIn");
 const [enabled, enabledAttrs] = defineField("enabled");
 
-// 提交处理
 const submit = handleSubmit((formData) => {
   if (type === DialogType.Create) {
     create(formData as RuleItem);
@@ -143,22 +149,21 @@ watch(open, async (value) => {
     <form class="w-full max-w-md space-y-6">
       <DialogContent class="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>{{ type }} Rule</DialogTitle>
+          <DialogTitle>{{ dialogTitle }}</DialogTitle>
         </DialogHeader>
 
         <Field>
-          <FieldLabel for="regexp">RegExp</FieldLabel>
+          <FieldLabel for="regexp">{{ t("regexp") }}</FieldLabel>
           <Input
             id="regexp"
             ref="regexpInput"
             v-model="regexp"
             v-bind="regexpAttrs"
-            placeholder="Please input"
+            :placeholder="t('inputPlaceholder')"
             :aria-invalid="!!errors.regexp"
           />
           <FieldDescription>
-            Use a valid JavaScript RegExp (e.g.
-            <code>^https://mail.google.com</code>).
+            {{ t("regexpHelp") }}
           </FieldDescription>
           <FieldError v-if="errors.regexp">
             {{ errors.regexp }}
@@ -166,12 +171,12 @@ watch(open, async (value) => {
         </Field>
 
         <Field>
-          <FieldLabel for="description">Description</FieldLabel>
+          <FieldLabel for="description">{{ t("description") }}</FieldLabel>
           <Input
             id="description"
             v-model="description"
             v-bind="descriptionAttrs"
-            placeholder="e.g. Work sites"
+            :placeholder="t('descriptionPlaceholder')"
             :aria-invalid="!!errors.description"
           />
           <FieldError v-if="errors.description">
@@ -180,46 +185,40 @@ watch(open, async (value) => {
         </Field>
 
         <Field>
-          <FieldLabel for="openIn">Open In</FieldLabel>
+          <FieldLabel for="openIn">{{ t("openIn") }}</FieldLabel>
           <RadioGroup id="openIn" v-model="openIn" v-bind="openInAttrs">
             <span class="flex items-center space-x-2">
               <RadioGroupItem id="r1" value="normal" />
-              <Label for="r1">Normal</Label>
+              <Label for="r1">{{ t("normal") }}</Label>
             </span>
             <span class="flex items-center space-x-2">
               <RadioGroupItem id="r2" value="incognito" />
-              <Label for="r2">Incognito</Label>
+              <Label for="r2">{{ t("incognito") }}</Label>
             </span>
             <span class="flex items-center space-x-2">
               <RadioGroupItem id="r3" value="ignore" />
-              <Label for="r3">Ignore (Do nothing)</Label>
+              <Label for="r3">{{ t("ignoreDoNothing") }}</Label>
             </span>
           </RadioGroup>
           <FieldDescription v-if="openIn === OpenIn.Ignore">
-            Ignore has global priority and will prevent routing when matched.
+            {{ t("ignorePriorityHelp") }}
           </FieldDescription>
         </Field>
 
         <Field>
-          <FieldLabel for="test-url">Test URL (optional)</FieldLabel>
+          <FieldLabel for="test-url">{{ t("testUrlOptional") }}</FieldLabel>
           <Input
             id="test-url"
             v-model="testUrl"
-            placeholder="https://example.com/path"
+            :placeholder="t('testUrlPlaceholder')"
           />
           <FieldDescription>
-            {{
-              testResult === null
-                ? "Try an example URL to verify the pattern."
-                : testResult
-                  ? "Matches the pattern."
-                  : "Does not match the pattern."
-            }}
+            {{ testResultMessage }}
           </FieldDescription>
         </Field>
 
         <Field>
-          <FieldLabel for="enabled">Enabled</FieldLabel>
+          <FieldLabel for="enabled">{{ t("enabled") }}</FieldLabel>
           <div>
             <Checkbox
               id="enabled"
@@ -235,9 +234,9 @@ watch(open, async (value) => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline" @click="close"> Cancel </Button>
+            <Button variant="outline" @click="close"> {{ t("cancel") }} </Button>
           </DialogClose>
-          <Button type="submit" @click="submit"> Save </Button>
+          <Button type="submit" @click="submit"> {{ t("save") }} </Button>
         </DialogFooter>
       </DialogContent>
     </form>

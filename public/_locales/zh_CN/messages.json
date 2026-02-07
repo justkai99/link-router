@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "根据正则规则自动将链接路由到普通窗口或无痕窗口，并可一键切换模式。"
+  },
+  "commandOpenPanelDescription": { "message": "打开扩展面板" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Ignore 规则无论顺序如何，都会覆盖所有其他规则。"
+  },
+  "ignoreRuleCountOne": { "message": "$1 条 Ignore 规则" },
+  "ignoreRuleCountOther": { "message": "$1 条 Ignore 规则" },
+
+  "searchPlaceholder": { "message": "按 RegExp 或描述搜索" },
+  "searchAriaLabel": { "message": "搜索规则" },
+  "importJson": { "message": "导入 JSON" },
+  "exportJson": { "message": "导出 JSON" },
+  "create": { "message": "新建" },
+
+  "filters": { "message": "筛选" },
+  "openIn": { "message": "打开方式" },
+  "status": { "message": "状态" },
+  "all": { "message": "全部" },
+  "normal": { "message": "普通" },
+  "incognito": { "message": "无痕" },
+  "ignore": { "message": "忽略" },
+  "enabled": { "message": "启用" },
+  "disabled": { "message": "禁用" },
+  "rulesSummary": { "message": "$1 条规则 · $2 条已禁用" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "描述" },
+  "createdAt": { "message": "创建时间" },
+  "updatedAt": { "message": "更新时间" },
+  "operations": { "message": "操作" },
+  "highestPriority": { "message": "最高优先级" },
+
+  "shadowingWarning": {
+    "message": "可能永远不会生效，因为被 Ignore 规则覆盖：$1"
+  },
+  "moveRuleUpAria": { "message": "上移规则" },
+  "moveRuleDownAria": { "message": "下移规则" },
+  "moveUp": { "message": "上移" },
+  "moveDown": { "message": "下移" },
+  "ignoreOrderingHint": {
+    "message": "Ignore 规则总是覆盖非 Ignore 规则；顺序只在 Ignore 规则之间生效。"
+  },
+
+  "editRuleAria": { "message": "编辑规则" },
+  "edit": { "message": "编辑" },
+  "moreActionsAria": { "message": "更多操作" },
+  "moreActions": { "message": "更多操作" },
+  "duplicate": { "message": "复制" },
+  "moveToTop": { "message": "移到顶部" },
+  "moveToBottom": { "message": "移到底部" },
+  "delete": { "message": "删除" },
+
+  "noRulesYet": { "message": "还没有规则。" },
+  "example": { "message": "示例：" },
+  "createFirstRule": { "message": "创建第一条规则" },
+  "noMatchingRules": { "message": "没有匹配的规则。" },
+  "clearFilters": { "message": "清除筛选" },
+
+  "deleteRuleTitle": { "message": "删除规则" },
+  "deleteRuleDescription": {
+    "message": "此操作无法撤销。所选规则将被永久删除。"
+  },
+  "cancel": { "message": "取消" },
+  "save": { "message": "保存" },
+
+  "createRuleTitle": { "message": "新建规则" },
+  "editRuleTitle": { "message": "编辑规则" },
+  "inputPlaceholder": { "message": "请输入" },
+  "descriptionPlaceholder": { "message": "例如：工作网站" },
+  "regexpHelp": {
+    "message": "请使用有效的 JavaScript 正则表达式（例如：^https://mail.google.com）。"
+  },
+  "ignoreDoNothing": { "message": "忽略（不执行任何操作）" },
+  "ignorePriorityHelp": {
+    "message": "Ignore 拥有全局最高优先级，匹配后将阻止路由。"
+  },
+
+  "testUrlOptional": { "message": "测试 URL（可选）" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "输入示例 URL 以验证该规则。" },
+  "testUrlMatch": { "message": "匹配该规则。" },
+  "testUrlNoMatch": { "message": "不匹配该规则。" },
+
+  "regexpRequired": { "message": "RegExp 不能为空" },
+  "regexpInvalid": { "message": "RegExp 格式无效" },
+  "descriptionRequired": { "message": "描述不能为空" },
+  "descriptionTooLong": { "message": "描述过长" },
+
+  "importInvalidFormat": {
+    "message": "JSON 格式无效。应为 RuleItem[] 或 { rules: RuleItem[] }。"
+  },
+  "importNoValidRules": { "message": "文件中没有有效规则。" },
+  "importReplaceConfirm": {
+    "message": "导入将替换当前的 $1 条规则。是否继续？"
+  },
+  "importFailed": {
+    "message": "导入规则失败，请检查 JSON 格式。"
+  },
+
+  "notAvailable": { "message": "-" }
+}

@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "正規表現ルールに基づいてリンクを通常ウィンドウまたはシークレットウィンドウへ自動振り分けし、モードを即時切り替えできます。"
+  },
+  "commandOpenPanelDescription": { "message": "拡張機能パネルを開く" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Ignore ルールは順序に関係なく、常に他のすべてのルールより優先されます。"
+  },
+  "ignoreRuleCountOne": { "message": "Ignore ルール: $1 件" },
+  "ignoreRuleCountOther": { "message": "Ignore ルール: $1 件" },
+
+  "searchPlaceholder": { "message": "RegExp または説明で検索" },
+  "searchAriaLabel": { "message": "ルールを検索" },
+  "importJson": { "message": "JSON をインポート" },
+  "exportJson": { "message": "JSON をエクスポート" },
+  "create": { "message": "作成" },
+
+  "filters": { "message": "フィルター" },
+  "openIn": { "message": "開く先" },
+  "status": { "message": "状態" },
+  "all": { "message": "すべて" },
+  "normal": { "message": "通常" },
+  "incognito": { "message": "シークレット" },
+  "ignore": { "message": "無視" },
+  "enabled": { "message": "有効" },
+  "disabled": { "message": "無効" },
+  "rulesSummary": { "message": "ルール $1 件 · 無効 $2 件" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "説明" },
+  "createdAt": { "message": "作成日時" },
+  "updatedAt": { "message": "更新日時" },
+  "operations": { "message": "操作" },
+  "highestPriority": { "message": "最優先" },
+
+  "shadowingWarning": {
+    "message": "Ignore ルールのため効果がない可能性があります: $1"
+  },
+  "moveRuleUpAria": { "message": "ルールを上へ移動" },
+  "moveRuleDownAria": { "message": "ルールを下へ移動" },
+  "moveUp": { "message": "上へ" },
+  "moveDown": { "message": "下へ" },
+  "ignoreOrderingHint": {
+    "message": "Ignore ルールは非 Ignore ルールより常に優先されます。順序が影響するのは Ignore 同士のみです。"
+  },
+
+  "editRuleAria": { "message": "ルールを編集" },
+  "edit": { "message": "編集" },
+  "moreActionsAria": { "message": "その他の操作" },
+  "moreActions": { "message": "その他の操作" },
+  "duplicate": { "message": "複製" },
+  "moveToTop": { "message": "先頭へ移動" },
+  "moveToBottom": { "message": "末尾へ移動" },
+  "delete": { "message": "削除" },
+
+  "noRulesYet": { "message": "ルールがまだありません。" },
+  "example": { "message": "例:" },
+  "createFirstRule": { "message": "最初のルールを作成" },
+  "noMatchingRules": { "message": "一致するルールがありません。" },
+  "clearFilters": { "message": "フィルターをクリア" },
+
+  "deleteRuleTitle": { "message": "ルールを削除" },
+  "deleteRuleDescription": {
+    "message": "この操作は元に戻せません。選択したルールは完全に削除されます。"
+  },
+  "cancel": { "message": "キャンセル" },
+  "save": { "message": "保存" },
+
+  "createRuleTitle": { "message": "ルールを作成" },
+  "editRuleTitle": { "message": "ルールを編集" },
+  "inputPlaceholder": { "message": "入力してください" },
+  "descriptionPlaceholder": { "message": "例: 仕事サイト" },
+  "regexpHelp": {
+    "message": "有効な JavaScript RegExp を使用してください（例: ^https://mail.google.com）。"
+  },
+  "ignoreDoNothing": { "message": "無視（何もしない）" },
+  "ignorePriorityHelp": {
+    "message": "Ignore はグローバル最優先です。一致するとルーティングを停止します。"
+  },
+
+  "testUrlOptional": { "message": "テスト URL（任意）" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "サンプル URL を入力してパターンを確認してください。" },
+  "testUrlMatch": { "message": "パターンに一致します。" },
+  "testUrlNoMatch": { "message": "パターンに一致しません。" },
+
+  "regexpRequired": { "message": "RegExp は必須です" },
+  "regexpInvalid": { "message": "RegExp パターンが無効です" },
+  "descriptionRequired": { "message": "説明は必須です" },
+  "descriptionTooLong": { "message": "説明が長すぎます" },
+
+  "importInvalidFormat": {
+    "message": "JSON 形式が無効です。RuleItem[] または { rules: RuleItem[] } を指定してください。"
+  },
+  "importNoValidRules": { "message": "有効なルールがファイル内に見つかりません。" },
+  "importReplaceConfirm": {
+    "message": "インポートすると現在の $1 件のルールを置き換えます。続行しますか？"
+  },
+  "importFailed": {
+    "message": "ルールのインポートに失敗しました。JSON 形式を確認してください。"
+  },
+
+  "notAvailable": { "message": "-" }
+}

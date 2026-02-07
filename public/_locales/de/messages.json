@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "Leitet Links per Regex automatisch in normale oder Inkognito-Fenster um und schaltet Modi sofort um."
+  },
+  "commandOpenPanelDescription": { "message": "Erweiterungspanel öffnen" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Ignore-Regeln haben immer Vorrang vor allen anderen Regeln, unabhängig von der Reihenfolge."
+  },
+  "ignoreRuleCountOne": { "message": "$1 Ignore-Regel" },
+  "ignoreRuleCountOther": { "message": "$1 Ignore-Regeln" },
+
+  "searchPlaceholder": { "message": "Nach RegExp oder Beschreibung suchen" },
+  "searchAriaLabel": { "message": "Regeln durchsuchen" },
+  "importJson": { "message": "JSON importieren" },
+  "exportJson": { "message": "JSON exportieren" },
+  "create": { "message": "Erstellen" },
+
+  "filters": { "message": "Filter" },
+  "openIn": { "message": "Öffnen in" },
+  "status": { "message": "Status" },
+  "all": { "message": "Alle" },
+  "normal": { "message": "Normal" },
+  "incognito": { "message": "Inkognito" },
+  "ignore": { "message": "Ignorieren" },
+  "enabled": { "message": "Aktiv" },
+  "disabled": { "message": "Deaktiviert" },
+  "rulesSummary": { "message": "$1 Regeln · $2 deaktiviert" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "Beschreibung" },
+  "createdAt": { "message": "Erstellt am" },
+  "updatedAt": { "message": "Aktualisiert am" },
+  "operations": { "message": "Aktionen" },
+  "highestPriority": { "message": "Höchste Priorität" },
+
+  "shadowingWarning": {
+    "message": "Wird möglicherweise nie wirksam wegen Ignore-Regel: $1"
+  },
+  "moveRuleUpAria": { "message": "Regel nach oben verschieben" },
+  "moveRuleDownAria": { "message": "Regel nach unten verschieben" },
+  "moveUp": { "message": "Hoch" },
+  "moveDown": { "message": "Runter" },
+  "ignoreOrderingHint": {
+    "message": "Ignore-Regeln überschreiben immer Nicht-Ignore-Regeln; die Reihenfolge zählt nur zwischen Ignore-Regeln."
+  },
+
+  "editRuleAria": { "message": "Regel bearbeiten" },
+  "edit": { "message": "Bearbeiten" },
+  "moreActionsAria": { "message": "Weitere Aktionen" },
+  "moreActions": { "message": "Weitere Aktionen" },
+  "duplicate": { "message": "Duplizieren" },
+  "moveToTop": { "message": "Nach oben verschieben" },
+  "moveToBottom": { "message": "Nach unten verschieben" },
+  "delete": { "message": "Löschen" },
+
+  "noRulesYet": { "message": "Noch keine Regeln." },
+  "example": { "message": "Beispiel:" },
+  "createFirstRule": { "message": "Erste Regel erstellen" },
+  "noMatchingRules": { "message": "Keine passenden Regeln." },
+  "clearFilters": { "message": "Filter zurücksetzen" },
+
+  "deleteRuleTitle": { "message": "Regel löschen" },
+  "deleteRuleDescription": {
+    "message": "Diese Aktion kann nicht rückgängig gemacht werden. Die ausgewählte Regel wird dauerhaft gelöscht."
+  },
+  "cancel": { "message": "Abbrechen" },
+  "save": { "message": "Speichern" },
+
+  "createRuleTitle": { "message": "Regel erstellen" },
+  "editRuleTitle": { "message": "Regel bearbeiten" },
+  "inputPlaceholder": { "message": "Bitte eingeben" },
+  "descriptionPlaceholder": { "message": "z. B. Arbeitsseiten" },
+  "regexpHelp": {
+    "message": "Verwende eine gültige JavaScript-RegExp (z. B. ^https://mail.google.com)."
+  },
+  "ignoreDoNothing": { "message": "Ignorieren (Nichts tun)" },
+  "ignorePriorityHelp": {
+    "message": "Ignore hat globale Priorität und verhindert das Routing bei Treffer."
+  },
+
+  "testUrlOptional": { "message": "Test-URL (optional)" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "Teste eine Beispiel-URL, um das Muster zu prüfen." },
+  "testUrlMatch": { "message": "Entspricht dem Muster." },
+  "testUrlNoMatch": { "message": "Entspricht nicht dem Muster." },
+
+  "regexpRequired": { "message": "RegExp ist erforderlich" },
+  "regexpInvalid": { "message": "Ungültiges RegExp-Muster" },
+  "descriptionRequired": { "message": "Beschreibung ist erforderlich" },
+  "descriptionTooLong": { "message": "Beschreibung ist zu lang" },
+
+  "importInvalidFormat": {
+    "message": "Ungültiges JSON-Format. Erwartet wird RuleItem[] oder { rules: RuleItem[] }."
+  },
+  "importNoValidRules": { "message": "Keine gültigen Regeln in der Datei gefunden." },
+  "importReplaceConfirm": {
+    "message": "Der Import ersetzt die aktuellen $1 Regeln. Fortfahren?"
+  },
+  "importFailed": {
+    "message": "Regeln konnten nicht importiert werden. Bitte JSON-Format prüfen."
+  },
+
+  "notAvailable": { "message": "-" }
+}

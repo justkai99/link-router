@@ -1,0 +1,108 @@
+{
+  "extensionName": { "message": "Link Router" },
+  "extensionDescription": {
+    "message": "Автоматически направляет ссылки в обычные или приватные окна по regex и мгновенно переключает режим."
+  },
+  "commandOpenPanelDescription": { "message": "Открыть панель расширения" },
+  "optionsPageTitle": { "message": "Link Router" },
+
+  "ignorePriorityNotice": {
+    "message": "Правила Ignore всегда имеют приоритет над всеми остальными, независимо от порядка."
+  },
+  "ignoreRuleCountOne": { "message": "$1 правило Ignore" },
+  "ignoreRuleCountOther": { "message": "$1 правил Ignore" },
+
+  "searchPlaceholder": { "message": "Поиск по RegExp или описанию" },
+  "searchAriaLabel": { "message": "Поиск правил" },
+  "importJson": { "message": "Импорт JSON" },
+  "exportJson": { "message": "Экспорт JSON" },
+  "create": { "message": "Создать" },
+
+  "filters": { "message": "Фильтры" },
+  "openIn": { "message": "Открывать в" },
+  "status": { "message": "Статус" },
+  "all": { "message": "Все" },
+  "normal": { "message": "Обычное" },
+  "incognito": { "message": "Инкогнито" },
+  "ignore": { "message": "Игнорировать" },
+  "enabled": { "message": "Включено" },
+  "disabled": { "message": "Отключено" },
+  "rulesSummary": { "message": "$1 правил · отключено: $2" },
+
+  "tableIndex": { "message": "#" },
+  "regexp": { "message": "RegExp" },
+  "description": { "message": "Описание" },
+  "createdAt": { "message": "Создано" },
+  "updatedAt": { "message": "Обновлено" },
+  "operations": { "message": "Операции" },
+  "highestPriority": { "message": "Высший приоритет" },
+
+  "shadowingWarning": {
+    "message": "Может не сработать из-за правила Ignore: $1"
+  },
+  "moveRuleUpAria": { "message": "Переместить правило вверх" },
+  "moveRuleDownAria": { "message": "Переместить правило вниз" },
+  "moveUp": { "message": "Вверх" },
+  "moveDown": { "message": "Вниз" },
+  "ignoreOrderingHint": {
+    "message": "Правила Ignore всегда перекрывают не-Ignore; порядок важен только между Ignore-правилами."
+  },
+
+  "editRuleAria": { "message": "Редактировать правило" },
+  "edit": { "message": "Редактировать" },
+  "moreActionsAria": { "message": "Другие действия" },
+  "moreActions": { "message": "Другие действия" },
+  "duplicate": { "message": "Дублировать" },
+  "moveToTop": { "message": "Переместить в начало" },
+  "moveToBottom": { "message": "Переместить в конец" },
+  "delete": { "message": "Удалить" },
+
+  "noRulesYet": { "message": "Правил пока нет." },
+  "example": { "message": "Пример:" },
+  "createFirstRule": { "message": "Создать первое правило" },
+  "noMatchingRules": { "message": "Нет подходящих правил." },
+  "clearFilters": { "message": "Сбросить фильтры" },
+
+  "deleteRuleTitle": { "message": "Удалить правило" },
+  "deleteRuleDescription": {
+    "message": "Это действие нельзя отменить. Выбранное правило будет удалено навсегда."
+  },
+  "cancel": { "message": "Отмена" },
+  "save": { "message": "Сохранить" },
+
+  "createRuleTitle": { "message": "Создать правило" },
+  "editRuleTitle": { "message": "Редактировать правило" },
+  "inputPlaceholder": { "message": "Введите значение" },
+  "descriptionPlaceholder": { "message": "например, Рабочие сайты" },
+  "regexpHelp": {
+    "message": "Используйте корректный JavaScript RegExp (например, ^https://mail.google.com)."
+  },
+  "ignoreDoNothing": { "message": "Игнорировать (Ничего не делать)" },
+  "ignorePriorityHelp": {
+    "message": "Ignore имеет глобальный приоритет и блокирует маршрутизацию при совпадении."
+  },
+
+  "testUrlOptional": { "message": "Тестовый URL (необязательно)" },
+  "testUrlPlaceholder": { "message": "https://example.com/path" },
+  "testUrlHint": { "message": "Введите пример URL, чтобы проверить шаблон." },
+  "testUrlMatch": { "message": "Соответствует шаблону." },
+  "testUrlNoMatch": { "message": "Не соответствует шаблону." },
+
+  "regexpRequired": { "message": "RegExp обязателен" },
+  "regexpInvalid": { "message": "Некорректный шаблон RegExp" },
+  "descriptionRequired": { "message": "Описание обязательно" },
+  "descriptionTooLong": { "message": "Слишком длинное описание" },
+
+  "importInvalidFormat": {
+    "message": "Неверный формат JSON. Ожидается RuleItem[] или { rules: RuleItem[] }."
+  },
+  "importNoValidRules": { "message": "В файле не найдено корректных правил." },
+  "importReplaceConfirm": {
+    "message": "Импорт заменит текущие правила ($1). Продолжить?"
+  },
+  "importFailed": {
+    "message": "Не удалось импортировать правила. Проверьте формат JSON."
+  },
+
+  "notAvailable": { "message": "-" }
+}
