@@ -52,10 +52,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="mb-4 flex flex-col gap-3">
+  <div class="options-shell">
+    <div class="mb-4 flex flex-col gap-3 options-panel p-3">
     <div class="flex flex-wrap items-center gap-2">
       <div class="relative flex-1 min-w-[220px]">
-        <Search class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+        <Search class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-teal-600" />
         <Input
           v-model="searchQuery"
           class="pl-9"
@@ -69,7 +70,7 @@ onMounted(async () => {
       </Button>
     </div>
     <div class="flex flex-wrap items-center gap-3 text-sm">
-      <div class="flex items-center gap-2 text-slate-500">
+      <div class="flex items-center gap-2 text-teal-700">
         <Filter class="size-4" />
         <span>Filters</span>
       </div>
@@ -135,18 +136,19 @@ onMounted(async () => {
           Disabled
         </Button>
       </div>
-      <div class="text-sm text-slate-500 md:ml-auto">
+      <div class="rounded-md border border-cyan-200 bg-cyan-50 px-2 py-1 text-sm text-cyan-800 md:ml-auto">
         {{ totalCount }} rules · {{ disabledCount }} disabled
       </div>
     </div>
   </div>
-  <div>
+  <div class="options-panel p-2">
     <RulesTable
       :rules="filteredRules"
       :source-rules="rules"
       @create="open = true"
       @clear-filters="clearFilters"
     />
+  </div>
   </div>
   <CreateAndEditDialog
     v-if="open"

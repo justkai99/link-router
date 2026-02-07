@@ -140,7 +140,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
       <TableRow
         v-for="ruleItem in rules"
         :key="ruleItem.id"
-        class="align-top cursor-pointer transition-colors hover:bg-slate-50"
+        class="align-top cursor-pointer transition-colors hover:bg-cyan-50/70"
         @click="edit(ruleItem)"
       >
         <TableCell class="font-medium w-[50px]">
@@ -164,19 +164,26 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
         <!-- Open With: styled badge -->
         <TableCell>
           <span
-            class="inline-block px-2 py-0.5 rounded-md text-sm font-medium bg-slate-100 text-slate-800"
+            class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-sm font-medium"
+            :class="
+              ruleItem.openIn === OpenIn.Incognito
+                ? 'bg-amber-100 text-amber-900'
+                : ruleItem.openIn === OpenIn.Ignore
+                  ? 'bg-rose-100 text-rose-900'
+                  : 'bg-sky-100 text-sky-900'
+            "
             :title="ruleItem.openIn"
           >
             <template v-if="ruleItem.openIn === OpenIn.Incognito">
-              <HatGlasses class="inline" :size="20" />
+              <HatGlasses class="inline" :size="18" />
               Incognito
             </template>
             <template v-else-if="ruleItem.openIn === OpenIn.Ignore">
-              <CircleSlash class="inline" :size="20" />
+              <CircleSlash class="inline" :size="18" />
               Ignore
             </template>
             <template v-else>
-              <Chromium class="inline" :size="20" />
+              <Chromium class="inline" :size="18" />
               Normal
             </template>
           </span>
@@ -192,7 +199,10 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
                 (value) => toggleEnabled(ruleItem, value === true)
               "
             />
-            <span class="text-slate-600">
+            <span
+              class="font-medium"
+              :class="ruleItem.enabled ? 'text-emerald-700' : 'text-slate-500'"
+            >
               {{ ruleItem.enabled ? "Enabled" : "Disabled" }}
             </span>
           </label>
@@ -329,7 +339,7 @@ const duplicateRule = async (ruleItem: RuleItem, close: () => void) => {
             <template v-if="sourceRules.length === 0">
               <div class="font-medium text-slate-700">No rules yet.</div>
               <div class="mt-1">
-                Example: <code class="rounded bg-slate-100 px-1 py-0.5">^https://mail.google.com</code>
+                Example: <code class="rounded bg-cyan-100 px-1 py-0.5 text-cyan-900">^https://mail.google.com</code>
               </div>
               <Button class="mt-3" @click.stop="emit('create')">
                 Create your first rule
