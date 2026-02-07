@@ -4,21 +4,42 @@ Link Router is a browser extension that automatically determines whether a link 
 
 ## ✨ Core Features
 
-- Smart Routing (Regex Support) Define rules using Regular Expressions (Regex) to automatically route specific types of links to their designated environment (e.g., open work sites in Normal mode, and testing or social sites in Incognito).
+- Smart Routing (Regex Support)
+  Define rules with Regular Expressions to route links to `Normal` or `Incognito`.
 
-- Ignore Rules Add "Ignore" rules to explicitly stop routing for matched URLs (no tab move, no window switch).
+- Ignore Rules With Global Highest Priority
+  `Ignore` rules always override all other rules when matched, regardless of list order.
 
-- Rule Priority by Order Rules are evaluated top-to-bottom; the first match wins. Use the Up/Down controls to reorder rules.
+- Rule Management UI
+  Search, filter, quick edit, reorder, duplicate, enable/disable inline, and delete with confirmation.
 
-- Instant Mode Toggle Instantly reopen the current tab in the opposite mode (Normal ⇋ Incognito) by simply clicking the extension icon or using a keyboard shortcut.
+- JSON Import / Export
+  Export all rules to a JSON file, and import rules by replace or merge.
+
+- Merge Import With Deduplication
+  Merge import deduplicates by `openIn + regexp`. Existing matched rules are updated; unmatched rules are added.
+
+- Instant Mode Toggle
+  Reopen the current tab in the opposite mode (`Normal` ⇋ `Incognito`) by clicking the extension icon or using a keyboard shortcut.
 
 ## ⚙️ Key Settings & Usage
 
-1. ⚠️ Critical: Enable Incognito Access After installation, you must go to your browser's extension management page (chrome://extensions), find Link Router, and toggle on "Allow in Incognito". Without this, the extension cannot manage Incognito windows.
+1. Enable Incognito Access (Required)
+   After installation, open `chrome://extensions`, find Link Router, and enable `Allow in Incognito`.
 
-2. Configuration Right-click the extension icon > Select Options > Add your Regex patterns and assign the target mode.
+2. Configure Rules
+   Right-click the extension icon and open `Options`.
 
-   - Open In: Normal / Incognito / Ignore (do nothing)
-   - Order matters: move rules up/down to change priority (first match wins).
+   - `Open In`: `Normal` / `Incognito` / `Ignore`
+   - Priority model:
+     - `Ignore` has global highest priority.
+     - For non-Ignore rules, order still matters (top-to-bottom).
 
-3. Recommended Shortcuts For maximum efficiency, we recommend setting the toggle shortcut to Alt + 2 (Windows) or Option + 2 (macOS).
+3. Import / Export Rules (JSON)
+   Use the buttons in Options:
+   - `Export JSON`: download all current rules.
+   - `Replace Import`: replace all current rules with imported file content.
+   - `Merge Import`: merge imported rules into current rules with dedup by `openIn + regexp`.
+
+4. Recommended Shortcut
+   For quick toggling, you can set a shortcut such as `Alt + 2` (Windows) or `Option + 2` (macOS).
