@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Roteia links automaticamente para janelas normais ou anônimas via regex e alterna o modo instantaneamente."
+    "message": "Roteie links automaticamente para Normal ou Anônima com regras inteligentes. Separe sessões e alterne modos com um clique."
   },
   "commandOpenPanelDescription": { "message": "Abrir painel da extensão" },
   "optionsPageTitle": { "message": "Link Router" },

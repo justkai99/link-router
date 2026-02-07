@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "根據正則規則自動將連結路由到一般視窗或無痕視窗，並可一鍵切換模式。"
+    "message": "用智慧規則自動將連結路由到一般或無痕視窗，隔離工作階段並一鍵切換模式。"
   },
   "commandOpenPanelDescription": { "message": "開啟擴充功能面板" },
   "optionsPageTitle": { "message": "Link Router" },

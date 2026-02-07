@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Leitet Links per Regex automatisch in normale oder Inkognito-Fenster um und schaltet Modi sofort um."
+    "message": "Leitet Links automatisch per Regeln in normale oder Inkognito-Fenster. Trennt Sitzungen und wechselt Modi mit einem Klick."
   },
   "commandOpenPanelDescription": { "message": "Erweiterungspanel öffnen" },
   "optionsPageTitle": { "message": "Link Router" },

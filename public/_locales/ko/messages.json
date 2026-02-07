@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "정규식 규칙에 따라 링크를 일반 창 또는 시크릿 창으로 자동 라우팅하고, 모드를 즉시 전환합니다."
+    "message": "스마트 규칙으로 링크를 일반 또는 시크릿으로 자동 라우팅. 세션을 분리하고 한 번의 클릭으로 모드 전환."
   },
   "commandOpenPanelDescription": { "message": "확장 프로그램 패널 열기" },
   "optionsPageTitle": { "message": "Link Router" },

@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Automatically route links to Normal or Incognito windows via regex and instantly toggle modes."
+    "message": "Automatically route links to Normal or Incognito with smart rules. Keep sessions separated and switch modes in one click."
   },
   "commandOpenPanelDescription": { "message": "Open extension panel" },
   "optionsPageTitle": { "message": "Link Router" },

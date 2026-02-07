@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Achemine automatiquement les liens vers des fenêtres normales ou privées via regex, avec bascule instantanée de mode."
+    "message": "Achemine automatiquement les liens vers Normal ou Privé avec des règles intelligentes. Séparez vos sessions en un clic."
   },
   "commandOpenPanelDescription": { "message": "Ouvrir le panneau de l'extension" },
   "optionsPageTitle": { "message": "Link Router" },

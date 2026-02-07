@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "根据正则规则自动将链接路由到普通窗口或无痕窗口，并可一键切换模式。"
+    "message": "用智能规则自动将链接路由到普通或无痕窗口，隔离会话并一键切换模式。"
   },
   "commandOpenPanelDescription": { "message": "打开扩展面板" },
   "optionsPageTitle": { "message": "Link Router" },

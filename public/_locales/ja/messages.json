@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "正規表現ルールに基づいてリンクを通常ウィンドウまたはシークレットウィンドウへ自動振り分けし、モードを即時切り替えできます。"
+    "message": "スマートルールでリンクを通常またはシークレットに自動振り分け。セッションを分離し、ワンクリックで切り替え。"
   },
   "commandOpenPanelDescription": { "message": "拡張機能パネルを開く" },
   "optionsPageTitle": { "message": "Link Router" },

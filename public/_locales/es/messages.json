@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Enruta enlaces automáticamente a ventanas normales o de incógnito mediante regex y permite alternar el modo al instante."
+    "message": "Enruta enlaces automáticamente a Normal o Incógnito con reglas inteligentes. Separa sesiones y cambia de modo con un clic."
   },
   "commandOpenPanelDescription": { "message": "Abrir panel de la extensión" },
   "optionsPageTitle": { "message": "Link Router" },

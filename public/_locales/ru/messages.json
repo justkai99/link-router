@@ -1,7 +1,7 @@
 {
   "extensionName": { "message": "Link Router" },
   "extensionDescription": {
-    "message": "Автоматически направляет ссылки в обычные или приватные окна по regex и мгновенно переключает режим."
+    "message": "Автоматически открывает ссылки в обычном или инкогнито-режиме по умным правилам. Разделяйте сессии и переключайтесь в один клик."
   },
   "commandOpenPanelDescription": { "message": "Открыть панель расширения" },
   "optionsPageTitle": { "message": "Link Router" },
